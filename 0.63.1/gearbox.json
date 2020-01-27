@@ -1,0 +1,15 @@
+{
+	"state": "production",
+	"organization": "gearboxworks",
+	"name": "hugo",
+	"version": "0.63.1",
+	"majorversion": "0.63",
+	"latest": "",
+	"network": "--network gearboxnet",
+	"ports": "-P",
+	"volumes": "",
+	"restart": "--restart no",
+	"args": "",
+	"env": "HUGO_VERSION"
+}
+
