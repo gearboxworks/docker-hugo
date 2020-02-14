@@ -1,0 +1,16 @@
+{
+	"state": "production",
+	"organization": "gearboxworks",
+	"name": "hugo",
+	"version": "0.64.1",
+	"majorversion": "0.64",
+	"latest": "1",
+	"class": "webserver",
+	"network": "--network gearboxnet",
+	"ports": "-P",
+	"volumes": "",
+	"restart": "--restart no",
+	"args": "",
+	"env": "HUGO_VERSION"
+}
+

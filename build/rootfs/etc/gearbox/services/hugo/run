@@ -1,0 +1,15 @@
+#!/bin/bash
+
+echo "Hugo running"
+export HUGO_BIN="/usr/local/bin/hugo-extended"
+export HUGO_SRCDIR="/project/hugo"
+export HUGO_PUBLISHDIR="/project/www"
+
+if [ ! -d "${HUGO_SRCDIR}" ]
+then
+	rsync -HvaxP /hugo/ ${HUGO_SRCDIR}/
+fi
+
+cd /project/hugo
+su - gearbox -s /bin/bash --preserve-environment -c "${HUGO_BIN} server -D --verbose --minify --bind=\"0.0.0.0\" --port=1313 --destination=\"${HUGO_PUBLISHDIR}\" --renderToDisk"
+

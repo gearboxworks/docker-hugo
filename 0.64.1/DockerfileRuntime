@@ -1,0 +1,26 @@
+ARG VERSION=0.64.1
+
+# 1. First reference the gearbox-base image.
+FROM gearboxworks/gearbox-base:alpine-3.10
+ARG VERSION
+
+# 2. Set up env variables.
+MAINTAINER Gearbox Team <team@gearbox.works>
+ENV GEARBOX_CONTAINER_NAME "docker-hugo"
+ENV GEARBOX_CONTAINER_VERSION $VERSION
+
+# 3. Now copy the local files specific to this container.
+COPY build /build
+COPY ${VERSION}/build /build
+COPY ${VERSION}/gearbox.json /build/gearbox.json
+
+# 4. Run the build-base.sh script to set everything up.
+RUN /bin/sh /build/build-base.sh
+
+# 5. Run the build-hugo.sh script to set everything up.
+RUN /bin/sh /build/build-hugo.sh
+
+# 6. Expose ports.
+EXPOSE 22 80 1313 9970
+WORKDIR /project
+

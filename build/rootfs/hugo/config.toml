@@ -1,0 +1,40 @@
+baseURL = "http://gearbox.local/"
+languageCode = "en-us"
+title = "Gearbox: Hugo Site"
+theme = "monopriv"
+publishDir = "/project/www/"
+Paginate = 32
+enableRSS = true
+canonifyurls = true
+relativeurls = false
+enableinlineshortcodes = true
+ignoreFiles = [ "\\.swp$" ]
+builddrafts = true
+
+[frontmatter]
+	lastmod = [":git", "lastmod", ":fileModTime", "date", "publishDate"]
+
+#[outputs]
+#	home = ["HTML", "AMP", "RSS"]
+#	page = ["HTML"]
+#	section = ["HTML", "RSS"]
+#	taxonomy = ["HTML", "RSS"]
+#	category = ["HTML", "RSS"]
+
+[sitemap]
+	changefreq = "daily"
+	filename = "sitemap.xml"
+	priority = 1.0
+
+[Params]
+	publishername = "Gearbox Works"
+	publisherlogo = "https://gearboxworks.io/banner.jpg"
+	publisherlogowidth = 640
+	publisherlogoheight = 360
+
+[Params.Author]
+	name = "Gearbox Works"
+	homepage = "https://gearboxworks.io/"
+	image = "https://gearboxworks.io/banner.jpg"
+	bio = "Gearbox just works"
+

@@ -1,0 +1,28 @@
+{{define "main"}}
+{{- partial "hero.html" . -}}
+<section id="posts" class="container mt-4">
+    {{ if .Site.Params.search.enabled }}
+        {{partial "search.html" .}}
+    {{end}}
+	<div class="card-columns mt-3">
+		{{range first 6 .Site.RegularPages }}
+			{{if eq .Section "post"}}
+				<div class="bg-light card">
+					<div class="card-body">
+					  <h5 class="font-weight-bold card-title">{{.Title}}</h5>
+					  <h6 class="text-monospace card-subtitle mb-2 text-muted">{{ .PublishDate.Format "January 2, 2006" }}</h6>
+					  <small class="card-text text-monospace">{{.Summary}}</small>
+					  <a href="{{.Permalink}}" class="card-link">Read More...</a>
+					</div>
+			  </div>
+			{{end}}
+		{{end}}
+		</div>
+</section>
+<section class="container text-center mt-2">
+	<a href='https://stallman.org/facebook.html' target="_blank">
+		<img  class="img-responsive" src='{{ "img/no-facebook.png" | absURL }}' width="200px" alt="I'm Not On Faceboook">
+	</a>
+</section>
+{{end}}
+

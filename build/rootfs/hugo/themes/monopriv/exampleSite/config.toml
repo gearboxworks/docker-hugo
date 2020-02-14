@@ -1,0 +1,37 @@
+baseURL = "https://gohugo.io/"
+title = "Monopriv"
+languagecode = "en"
+author = "Steve Francia"
+copyright = "Copyright © 2008–2019" #supports html markup
+paginate = 3
+languageCode = "en"
+DefaultContentLanguage = "en"
+enableInlineShortcodes = true
+footnoteReturnLinkContents = "^"
+googleAnalytics = "UA-123-45"
+disqusShortname = "yourdiscussshortname"
+theme = "monopriv"
+enableEmoji = true
+summaryLength = 20
+
+[params]  
+about = "A privacy focused minimal bootstrap theme"
+github = "https://github.com"
+gitlab = "https://gitlab.com"
+email = "mail@example.com"
+# site meta description
+metadesc = "A simple privacy oriented bootstrap hugo blog"
+# site meta keywords
+metakeys = "hugo, simple, minimal, bootstrap, blog"
+# enable/disable disqus comments 
+disqus = false 
+# enable/disable google analytics 
+analytics = false
+
+[params.search] # Site search powered by DuckDuckGo
+enabled = true
+placeholder="Site Search"
+
+[params.hero]
+enabled = true
+img = "img/logo.png"
