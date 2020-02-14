@@ -38,7 +38,7 @@ chmod a+x /usr/local/bin/*; checkExit
 #git clone https://github.com/wildhaber/gohugo-amp.git
 #rm -rf gohugo-amp/.git*
 
-# /usr/local/bin/hugo new site /project/hugo
+# /usr/local/bin/hugo new site /home/gearbox/projects/default/hugo
 # /usr/local/bin/hugo -D --verbose --minify
 chown -fhR gearbox:gearbox /usr/local/bin /hugo; checkExit
 

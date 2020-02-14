@@ -1,13 +1,15 @@
 baseURL = "http://gearbox.local/"
-languageCode = "en-us"
 title = "Gearbox: Hugo Site"
+languageCode = "en-us"
+author = "Gearbox Works"
+copyright = "Copyright 2020"
+paginate = 32
+enableinlineshortcodes = true
 theme = "monopriv"
 publishDir = "/project/www/"
-Paginate = 32
 enableRSS = true
 canonifyurls = true
 relativeurls = false
-enableinlineshortcodes = true
 ignoreFiles = [ "\\.swp$" ]
 builddrafts = true
 
@@ -27,10 +29,23 @@ builddrafts = true
 	priority = 1.0
 
 [Params]
+	about = ""
+	metadesc = ""
+	metakeys = ""
+	disqus = false
+	analytics = false
 	publishername = "Gearbox Works"
 	publisherlogo = "https://gearboxworks.io/banner.jpg"
 	publisherlogowidth = 640
 	publisherlogoheight = 360
+
+[Params.search]
+	enabled = true
+	placeholder="Site Search"
+
+[Params.hero]
+	enabled = true
+	img = "https://gearboxworks.io/banner.jpg"
 
 [Params.Author]
 	name = "Gearbox Works"

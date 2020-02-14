@@ -483,7 +483,7 @@ start:
 
 ifneq ($(SKIP),yes)
 ifeq ($(shell docker container ls -a -q -f name="^$(CONTAINER_NAME)"),)
-	@echo "# Gearbox[$(CONTAINER_NAME)]: Container doesn't exist. Please create one."
+	@echo "# Gearbox[$(CONTAINER_NAME)]: Container doesn't exist. Nothing to do."
 else ifeq ($(shell docker container ls -q -f name="^$(CONTAINER_NAME)"),)
 	docker start $(CONTAINER_NAME)
 else
@@ -499,7 +499,7 @@ stop:
 
 ifneq ($(SKIP),yes)
 ifeq ($(shell docker container ls -a -q -f name="^$(CONTAINER_NAME)"),)
-	@echo "# Gearbox[$(CONTAINER_NAME)]: Container doesn't exist. Please create one."
+	@echo "# Gearbox[$(CONTAINER_NAME)]: Container doesn't exist. Nothing to do."
 else ifeq ($(shell docker container ls -q -f name="^$(CONTAINER_NAME)"),)
 	@echo "# Gearbox[$(CONTAINER_NAME)]: Container already stopped. Nothing to do."
 else
