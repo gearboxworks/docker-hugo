@@ -1,0 +1,15 @@
+#!/bin/bash -l
+# {{ .CreationWarning }}
+# {{ .CreationInfo }}
+
+c_ok "Starting."
+
+GBEP="$(which ${GEARBOX_ENTRYPOINT})"
+if [ "${GBEP}" != "" ]
+then
+	${GBEP} ${GEARBOX_ARGS}
+else
+	# Add your service entry here, if no entrypoint defined in the ref container.
+	echo ""
+fi
+

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+EXEC="$0-$(uname -s)"
+if [ ! -x "${EXEC}" ]
+then
+	echo "Gearbox: Architecture not supported."
+	exit
+fi
+
+exec "${EXEC}" "$@"

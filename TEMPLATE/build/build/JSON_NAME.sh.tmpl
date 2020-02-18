@@ -1,0 +1,25 @@
+#!/bin/bash
+# {{ .CreationInfo }}
+
+test -f /etc/gearbox/bin/colors.sh && . /etc/gearbox/bin/colors.sh
+
+c_ok "Started."
+
+c_ok "Installing packages."
+if [ -f /etc/gearbox/build/{{ .Json.name }}.apks ]
+then
+	APKS="$(cat /etc/gearbox/build/{{ .Json.name }}.apks)"
+	apk update && apk add --no-cache ${APKS}; checkExit
+fi
+
+if [ -f /etc/gearbox/build/{{ .Json.name }}.env ]
+then
+	. /etc/gearbox/build/{{ .Json.name }}.env
+fi
+
+if [ ! -d /usr/local/bin ]
+then
+	mkdir -p /usr/local/bin; checkExit
+fi
+
+c_ok "Finished."
