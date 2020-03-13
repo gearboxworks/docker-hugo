@@ -1,56 +1,36 @@
-![{{ .Json.name }} {{ .Json.version }}](https://img.shields.io/badge/{{ .Json.name }}-{{ .Json.version }}-green.svg)
-
 ![Gearbox](https://github.com/gearboxworks/gearbox.github.io/raw/master/Gearbox-100x.png)
 
-# {{ .Json.name }} Docker Container for Gearbox
-This is the repository for the [{{ .Json.name }}]({{ .Json.refurl }}) Docker container implemented for [Gearbox](https://github.com/gearboxworks/gearbox).
-It currently provides versions {{ .Json.version }}
 
-## Supported tags and respective Dockerfiles
+# Another [Gearbox](https://github.com/gearboxworks/) Docker container service - {{ .Json.name }}
+This is the repository for the [{{ .Json.name }}]({{ .Json.refurl }}) Docker container implemented for [Gearbox](https://github.com/gearboxworks/).
 
-`{{ .Json.version }}`, `{{ .Json.majorversion }}`{{ with .Json.latest }}, `latest`{{ end }} _([{{ .Json.version }}/DockerfileRuntime](https://github.com/gearboxworks/docker-{{ .Json.name }}/blob/master/{{ .Json.version }}/DockerfileRuntime))_
+
+## Repository Info
+GitHub commit: ![commit-date](https://img.shields.io/github/last-commit/gearboxworks/docker-{{ .Json.name }}?style=flat-square)
+
+GitHub release(latest): ![last-release-date](https://img.shields.io/github/release-date/gearboxworks/docker-{{ .Json.name }}) ![last-release-date](https://img.shields.io/github/v/tag/gearboxworks/docker-{{ .Json.name }}?sort=semver) [![release-state](https://github.com/gearboxworks/docker-{{ .Json.name }}/workflows/release/badge.svg?event=release)](https://github.com/gearboxworks/docker-{{ .Json.name }}/actions?query=workflow%3Arelease)
+
+
+## Supported versions and respective Dockerfiles
+| Service | GitHub Version | Docker Version | Docker Size | Docker Tags | Dockerfile |
+| ------- | -------------- | -------------- | ----------- | ----------- | ---------- |
+{{ range $key, $value := .Json.versions }}| {{ if $.Json.refurl }}[{{ $.Json.name }}]({{ $.Json.refurl }}){{ else }}{{ $.Json.name }}{{ end }} | ![{{ $.Json.name }}](https://img.shields.io/badge/{{ $.Json.name }}-{{ $key }}-green.svg) | ![Docker Version)](https://img.shields.io/docker/v/gearboxworks/{{ $.Json.name }}/{{ $key }}) | ![Docker Size](https://img.shields.io/docker/image-size/gearboxworks/{{ $.Json.name }}/{{ $key }}) | `{{ $key }}`, `{{ $value.majorversion }}`{{ with $value.latest }}, `latest`{{ end }} | _([{{ $key }}/DockerfileRuntime](https://github.com/gearboxworks/docker-{{ $.Json.name }}/blob/master/{{ $value.majorversion }}/DockerfileRuntime))_ |
+{{ end }}
+
 
 ## Using this container.
-If you want to use this container as part of Gearbox, then use the Docker Hub method.
-Or you can use the GitHub method to build and run the container.
+This container has been designed to work within the [Gearbox](https://github.com/gearboxworks/)
+framework.
+However, due to the flexability of Gearbox, it can be used outside of this framework.
+You can either use it directly from DockerHub or GitHub.
 
-## Using it from Docker Hub
 
-### Links
-(Docker Hub repo)[https://hub.docker.com/r/gearboxworks/{{ .Json.name }}/]
-
-(Docker Cloud repo)[https://cloud.docker.com/swarm/gearboxworks/repository/docker/gearbox/{{ .Json.name }}/]
-
-### Setup from Docker Hub
-A simple `docker pull gearboxworks/{{ .Json.name }}` will pull down the latest version.
-
-### Runtime from Docker Hub
-start - Spin up a Docker container with the correct runtime configs.
-
-`docker run -d --name {{ .Json.name }}-{{ .Json.version }} --restart unless-stopped --network gearboxnet -P gearboxworks/{{ .Json.name }}:{{ .Json.version }}`
-
-stop - Stop a Docker container.
-
-`docker stop {{ .Json.name }}-{{ .Json.version }}`
-
-run - Run a Docker container in the foreground, (all STDOUT and STDERR will go to console). The Container be removed on termination.
-
-`docker run --rm --name {{ .Json.name }}-{{ .Json.version }} --network gearboxnet -P gearboxworks/{{ .Json.name }}:{{ .Json.version }}`
-
-shell - Run a shell, (/bin/bash), within a Docker container.
-
-`docker run --rm --name {{ .Json.name }}-{{ .Json.version }} -i -t --network gearboxnet -P gearboxworks/{{ .Json.name }}:{{ .Json.version }} /bin/bash`
-
-rm - Remove the Docker container.
-
-`docker container rm {{ .Json.name }}-{{ .Json.version }}`
-
-## Using it from GitHub repo
+## Method 1: GitHub repo
 
 ### Setup from GitHub repo
 Simply clone this repository to your local machine
 
-`git clone https://github.com/gearboxworks/docker-{{ .Json.name }}.git`
+`git clone https://github.com/gearboxworks/{{ .Json.name }}-docker.git`
 
 ### Building from GitHub repo
 `make build` - Build Docker images. Build all versions from the base directory or specific versions from each directory.
@@ -59,7 +39,7 @@ Simply clone this repository to your local machine
 
 `make clean` - Remove already built Docker images. Remove all versions from the base directory or specific versions from each directory.
 
-`make push` - Push already built Docker images to Docker Hub, (only for Gearbox {{ .Json.name }}). Push all versions from the base directory or specific versions from each directory.
+`make push` - Push already built Docker images to Docker Hub, (only for Gearbox admins). Push all versions from the base directory or specific versions from each directory.
 
 ### Runtime from GitHub repo
 When you `cd` into a version directory you can also perform a few more actions.
@@ -75,4 +55,43 @@ When you `cd` into a version directory you can also perform a few more actions.
 `make rm` - Remove the Docker container.
 
 `make test` - Will issue a `stop`, `rm`, `clean`, `build`, `create` and `start` on a Docker container.
+
+
+## Method 2: Docker Hub
+
+### Setup from Docker Hub
+A simple `docker pull gearbox/{{ .Json.name }}` will pull down the latest version.
+
+### Starting
+start - Spin up a Docker container with the correct runtime configs.
+
+`docker run -d --name {{ .Json.name }}-latest --restart unless-stopped --network gearboxnet gearbox/{{ .Json.name }}:latest`
+
+### Stopping
+stop - Stop a Docker container.
+
+`docker stop {{ .Json.name }}-latest`
+
+### Remove container
+rm - Remove the Docker container.
+
+`docker container rm {{ .Json.name }}-latest`
+
+### Run in foreground
+run - Run a Docker container in the foreground, (all STDOUT and STDERR will go to console). The Container be removed on termination.
+
+`docker run --rm --name {{ .Json.name }}-latest --network gearboxnet gearbox/{{ .Json.name }}:latest`
+
+### Run a shell
+shell - Run a shell, (/bin/bash), within a Docker container.
+
+`docker run --rm --name {{ .Json.name }}-latest -i -t --network gearboxnet gearbox/{{ .Json.name }}:latest /bin/bash`
+
+### SSH
+ssh - All [Gearbox](https://github.com/gearboxworks/) containers have a running SSH daemon. So you can connect remotely.
+
+```
+SSH_PORT="$(docker port {{ .Json.name }}-latest 22/tcp | sed 's/0.0.0.0://')"
+ssh -p ${SSH_PORT} -o StrictHostKeyChecking=no gearbox@localhost
+```
 

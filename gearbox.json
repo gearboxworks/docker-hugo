@@ -1,0 +1,27 @@
+{
+	"state": "production",
+	"organization": "gearboxworks",
+	"name": "hugo",
+	"maintainer": "Gearbox Team <team@gearbox.works>",
+	"class": "webserver",
+	"network": "--network gearboxnet",
+	"ports": [
+		"80",
+		"1313"
+	],
+	"volumes": "",
+	"restart": "--restart no",
+	"run": "",
+	"args": "",
+	"env": {
+		"HUGO_USER": "gearbox"
+	},
+	"refurl": "https://www.hugo.org/",
+	"versions": {
+		"0.64.1": {
+			"majorversion": "0.64",
+			"latest": true,
+			"base": "gearboxworks/gearbox-base:alpine-3.10"
+		}
+	}
+}

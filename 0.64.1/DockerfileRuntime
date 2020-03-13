@@ -1,7 +1,8 @@
 
+
 ################################################################################
 # WARNING: This file has been auto-generated. DO NOT EDIT: WARNING
-# Created on 2020-02-18T21:29:56+1100, using template:DockerfileRuntime.tmpl and json:gearbox.json
+# Created on 2020-03-14T01:19:18+1100, using template:DockerfileRuntime.tmpl and json:gearbox.json
 # Plain Docker container for docker-hugo based off gearboxworks/gearbox-base:alpine-3.10
 
 ARG VERSION=0.64.1
@@ -10,46 +11,50 @@ ARG VERSION=0.64.1
 FROM gearboxworks/gearbox-base:alpine-3.10
 ARG VERSION
 ARG GEARBOX_ENTRYPOINT
+ARG GEARBOX_ENTRYPOINT_ARGS
 
 # 2. Set up env variables.
 MAINTAINER Gearbox Team <team@gearbox.works>
 ENV GEARBOX_CONTAINER_NAME "docker-hugo"
 ENV GEARBOX_CONTAINER_VERSION ${VERSION}
 ENV GEARBOX_ENTRYPOINT ${GEARBOX_ENTRYPOINT}
-LABEL gearbox.json='{"state": "production","organization": "gearboxworks","name": "hugo","maintainer": "Gearbox Team <team@gearbox.works>","version": "0.64.1","majorversion": "0.64","latest": "1","class": "webserver","network": "--network gearboxnet","ports": ["80","1313"],"volumes": "","restart": "--restart no","args": "","env": {"HUGO_USER": "gearbox"},"refurl": "https://www.hugo.org/","base": "gearboxworks/gearbox-base:alpine-3.10"}'
-LABEL container.args=""
-LABEL container.base="gearboxworks/gearbox-base:alpine-3.10"
-LABEL container.class="webserver"
-LABEL container.env="map[HUGO_USER:gearbox]"
-LABEL container.latest="1"
-LABEL container.maintainer="Gearbox Team <team@gearbox.works>"
-LABEL container.majorversion="0.64"
-LABEL container.name="hugo"
-LABEL container.network="--network gearboxnet"
-LABEL container.organization="gearboxworks"
-LABEL container.ports="[80 1313]"
-LABEL container.refurl="https://www.hugo.org/"
-LABEL container.restart="--restart no"
-LABEL container.state="production"
-LABEL container.version="0.64.1"
-LABEL container.volumes=""
-
-ENV GEARBOX_ARGS ""
-ENV GEARBOX_BASE "gearboxworks/gearbox-base:alpine-3.10"
-ENV GEARBOX_CLASS "webserver"
-
-ENV GEARBOX_LATEST "1"
-ENV GEARBOX_MAINTAINER "Gearbox Team <team@gearbox.works>"
-ENV GEARBOX_MAJORVERSION "0.64"
-ENV GEARBOX_NAME "hugo"
-ENV GEARBOX_NETWORK "--network gearboxnet"
-ENV GEARBOX_ORGANIZATION "gearboxworks"
-ENV GEARBOX_PORTS "[80 1313]"
-ENV GEARBOX_REFURL "https://www.hugo.org/"
-ENV GEARBOX_RESTART "--restart no"
-ENV GEARBOX_STATE "production"
+ENV GEARBOX_ENTRYPOINT_ARGS ${GEARBOX_ENTRYPOINT_ARGS}
+LABEL gearbox.json='{"state": "production","organization": "gearboxworks","name": "hugo","maintainer": "Gearbox Team <team@gearbox.works>","class": "webserver","network": "--network gearboxnet","ports": ["80","1313"],"volumes": "","restart": "--restart no","run": "","args": "","env": {"HUGO_USER": "gearbox"},"refurl": "https://www.hugo.org/","versions": {"0.64.1": {"majorversion": "0.64","latest": true,"base": "gearboxworks/gearbox-base:alpine-3.10"}}}'
+LABEL gearbox.version='0.64.1'
 ENV GEARBOX_VERSION "0.64.1"
+LABEL container.args=""
+ENV GEARBOX_ARGS ""
+LABEL container.class="webserver"
+ENV GEARBOX_CLASS "webserver"
+# SKIP env
+LABEL container.maintainer="Gearbox Team <team@gearbox.works>"
+ENV GEARBOX_MAINTAINER "Gearbox Team <team@gearbox.works>"
+LABEL container.name="hugo"
+ENV GEARBOX_NAME "hugo"
+LABEL container.network="--network gearboxnet"
+ENV GEARBOX_NETWORK "--network gearboxnet"
+LABEL container.organization="gearboxworks"
+ENV GEARBOX_ORGANIZATION "gearboxworks"
+LABEL container.ports="[80 1313]"
+ENV GEARBOX_PORTS "[80 1313]"
+LABEL container.refurl="https://www.hugo.org/"
+ENV GEARBOX_REFURL "https://www.hugo.org/"
+LABEL container.restart="--restart no"
+ENV GEARBOX_RESTART "--restart no"
+LABEL container.run=""
+ENV GEARBOX_RUN ""
+LABEL container.state="production"
+ENV GEARBOX_STATE "production"
+# SKIP versions
+LABEL container.volumes=""
 ENV GEARBOX_VOLUMES ""
+
+LABEL container.base="gearboxworks/gearbox-base:alpine-3.10"
+ENV GEARBOX_BASE "gearboxworks/gearbox-base:alpine-3.10"
+LABEL container.latest="true"
+ENV GEARBOX_LATEST "true"
+LABEL container.majorversion="0.64"
+ENV GEARBOX_MAJORVERSION "0.64"
 
 ENV HUGO_USER "gearbox"
 
@@ -60,10 +65,10 @@ COPY ${VERSION}/build /etc/gearbox
 COPY ${VERSION}/gearbox.json /etc/gearbox/gearbox.json
 
 # 4. Run the base.sh script to set everything up.
-RUN /bin/bash /etc/gearbox/build/base.sh
+RUN /bin/sh /etc/gearbox/build/base.sh
 
 # 5. Run the hugo.sh script to set everything up.
-RUN /bin/bash /etc/gearbox/build/hugo.sh
+RUN /bin/sh /etc/gearbox/build/hugo.sh
 
 # 6. Expose ports.
 EXPOSE 22 9970 80 1313 

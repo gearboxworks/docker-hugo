@@ -2,15 +2,15 @@
 
 echo "Hugo running"
 export HUGO_BIN="/usr/local/bin/hugo-extended"
-export HUGO_SRCDIR="/project/hugo"
-export HUGO_PUBLISHDIR="/project/www"
+export HUGO_SRCDIR="/home/gearbox/projects/default/hugo"
+export HUGO_PUBLISHDIR="/home/gearbox/projects/default/www"
 
 if [ ! -d "${HUGO_SRCDIR}" ]
 then
 	rsync -HvaxP /hugo/ ${HUGO_SRCDIR}/
 fi
 
-cd /project/hugo
+cd /home/gearbox/projects/default/hugo
 if [ -f config.toml ]
 then
 	echo "# Config file found."

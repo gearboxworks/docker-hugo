@@ -53,7 +53,7 @@ do
 	{{ .ExecName }} -json "{{ .JsonFile.Dir }}/{{ .JsonFile.Name }}" -create "${OUTFILE}"
 done
 
-find ${DIR}/rootfs/etc/gearbox/services -type f | xargs chmod 755
+find ${DIR}/services -type f | xargs chmod 755
 find ${DIR}/ -name '*\.sh' | xargs chmod 755
 
 {{ end }}

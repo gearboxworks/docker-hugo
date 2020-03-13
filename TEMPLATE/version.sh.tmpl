@@ -1,66 +1,64 @@
 #!/bin/bash
 # {{ .CreationWarning }}
 # {{ .CreationInfo }}
-{{ if not .Json.version }}
-# No version
-
-{{ else if not .Json.base }}
-# No base
+{{ $version := FindInMap .Json.versions .Env.GB_VERSION }}
+{{ if not $version }}
+# No version found in gearbox.json
 
 {{ else if not .Json.name }}
-# No name
+# No name found in gearbox.json
 
 {{ else }}
-DIR="{{ .Json.version }}"
+VERSION="{{ .Env.GB_VERSION }}"
+export VERSION
 
-if [ -d "${DIR}" ]
+if [ -d "${VERSION}" ]
 then
-	echo "Gearbox: Release version directory ${DIR} already exists."
+	echo "Gearbox: Release version directory ${VERSION} already exists."
 	exit 1
 fi
 
 ################################################################################
 # Maybe we have rsync, maybe we don't.
-mkdir "${DIR}"
+mkdir "${VERSION}"
 
 RSYNC="$(which rsync)"
 if [ "${RSYNC}" != "" ]
 then
-	rsync -HvaxP TEMPLATE/version/ "${DIR}/"
+	rsync -HvaxP TEMPLATE/version/ "${VERSION}/"
 else
-	tar cf - -C TEMPLATE/version . | tar xvf - -C "${DIR}"
+	tar cf - -C TEMPLATE/version . | tar xvf - -C "${VERSION}"
 fi
 
 ################################################################################
-if [ -f "{{ .JsonFile.Dir }}/{{ .JsonFile.Name }}" ]
+if [ -f "{{ $.JsonFile.Dir }}/{{ $.JsonFile.Name }}" ]
 then
-	cp "{{ .JsonFile.Dir }}/{{ .JsonFile.Name }}" "${DIR}/gearbox.json"
+	cp "{{ $.JsonFile.Dir }}/{{ $.JsonFile.Name }}" "${VERSION}/gearbox.json"
 fi
 
 ################################################################################
-TMPLDIRS="$(find ${DIR}/ -name '*JSON_NAME*')"
+TMPLDIRS="$(find ${VERSION}/ -name '*JSON_NAME*')"
 for dir in ${TMPLDIRS}
 do
-	NEWDIR="$(echo -n "${dir}" | sed 's/JSON_NAME/{{ .Json.name }}/')"
+	NEWDIR="$(echo -n "${dir}" | sed 's/JSON_NAME/{{ $.Json.name }}/')"
 	mv -i "${dir}" "${NEWDIR}"
 done
 
 ################################################################################
-TMPLFILES="$(find ${DIR}/ -name '*\.tmpl')"
+TMPLFILES="$(find ${VERSION}/ -name '*\.tmpl')"
 for file in ${TMPLFILES}
 do
-	OUTFILE="$(echo -n "${file}" | sed 's/JSON_NAME/{{ .Json.name }}/')"
+	OUTFILE="$(echo -n "${file}" | sed 's/JSON_NAME/{{ $.Json.name }}/')"
 	if [ "${file}" != "${OUTFILE}" ]
 	then
 		mv -i "${file}" "${OUTFILE}"
 	fi
 
 	echo "Gearbox: Processing ${OUTFILE}"
-	{{ .ExecName }} -json "{{ .JsonFile.Dir }}/{{ .JsonFile.Name }}" -create "${OUTFILE}"
+	{{ $.ExecName }} -json "{{ $.JsonFile.Dir }}/{{ $.JsonFile.Name }}" -create "${OUTFILE}"
 done
 
-find ${DIR}/rootfs/etc/gearbox/services -type f | xargs chmod 755
-find ${DIR}/ -name '*\.sh' | xargs chmod 755
-
+find ${VERSION}/rootfs/etc/gearbox/services -type f | xargs chmod 755
+find ${VERSION}/ -name '*\.sh' | xargs chmod 755
 {{ end }}
 # END

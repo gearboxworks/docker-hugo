@@ -53,8 +53,15 @@ ${DIR}/github-release download \
 if [ -f docker-template.tgz ]
 then
 	echo "# Gearbox[docker-template]: Extracting."
-	tar zxf docker-template.tgz
-	rm -f docker-template.tgz
+	mkdir docker-template/
+	tar zxf docker-template.tgz -C docker-template/
+	rsync -HvaxP --delete docker-template/* .
+	if [ ! -d .github/workflows ]
+	then
+		mkdir -p .github/workflows
+	fi
+	cp TEMPLATE/release.yml .github/workflows/
+	rm -rf docker-template.tgz docker-template/
 	echo "# Gearbox[docker-template]: Done."
 else
 	echo "# Gearbox[docker-template]: Cannot find docker-template repository."
