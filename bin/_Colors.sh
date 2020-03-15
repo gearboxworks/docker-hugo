@@ -52,7 +52,7 @@ blinkon()  { ${GB_TERM_CMD} "{{ .Json.blink.slow }}"; }
 blinkoff() { ${GB_TERM_CMD} "{{ .Json.blink.off }}"; }
 
 
-p_err()    { local _name="$1"; shift; blinkon; bp_echo "${_name}" red white $@; }
+p_err()    { local _name="$1"; shift; blinkon; bp_echo "${_name}" red white $@; blinkoff; }
 p_warn()   { local _name="$1"; shift; p_echo "${_name}" yellow $@; }
 p_info()   { local _name="$1"; shift; p_echo "${_name}" white $@; }
 p_ok()     { local _name="$1"; shift; p_echo "${_name}" green $@; }
@@ -67,7 +67,7 @@ p_cyan()   { local _name="$1"; shift; p_echo "${_name}" cyan $@; }
 p_white()  { local _name="$1"; shift; p_echo "${_name}" white $@; }
 
 
-c_err()    { blinkon; bp_echo "" red white "$@"; }
+c_err()    { blinkon; bp_echo "" red white "$@"; blinkoff; }
 c_warn()   { p_echo "" yellow "$@"; }
 c_info()   { p_echo "" white "$@"; }
 c_ok()     { p_echo "" green "$@"; }

@@ -4,14 +4,29 @@
 export ARCH GB_BINFILE GB_BINDIR GB_BASEDIR GB_JSONFILE GB_VERSIONS GB_VERSION GITBIN GB_GITURL GB_GITREPO
 
 ARCH="$(uname -s)"
+case ${ARCH} in
+	'Linux')
+		LOG_ARGS='-t 10'
+		;;
+	*)
+		LOG_ARGS='-r -t 10'
+		;;
+esac
 
 GB_BINFILE="$(./bin/JsonToConfig -json-string '{}' -template-string '{{ .ExecName }}')"
 GB_BINDIR="$(./bin/JsonToConfig -json-string '{}' -template-string '{{ .DirPath }}')"
 GB_BASEDIR="$(dirname "$GB_BINDIR")"
 GB_JSONFILE="${GB_BASEDIR}/gearbox.json"
 
-GB_VERSIONS="$(${GB_BINFILE} -json ${GB_JSONFILE} -template-string '{{ range $version, $value := .Json.versions }}{{ $version }} {{ end }}')"
-GB_VERSIONS="$(echo ${GB_VERSIONS})"	# Easily remove CR
+if [ -f "${GB_JSONFILE}" ]
+then
+	GB_VERSIONS="$(${GB_BINFILE} -json ${GB_JSONFILE} -template-string '{{ range $version, $value := .Json.versions }}{{ $version }} {{ end }}')"
+	GB_VERSIONS="$(echo ${GB_VERSIONS})"	# Easily remove CR
+
+	GB_IMAGENAME="$(${GB_BINFILE} -json ${GB_JSONFILE} -template-string '{{ .Json.organization }}/{{ .Json.name }}')"
+
+	GB_NAME="$(${GB_BINFILE} -json ${GB_JSONFILE} -template-string '{{ .Json.name }}')"
+fi
 
 GITBIN="$(which git)"
 GB_GITURL="$(${GITBIN} config --get remote.origin.url)"
@@ -219,6 +234,10 @@ gb_clean() {
 		gb_getenv ${GB_VERSION}
 
 
+		p_info "${GB_IMAGEVERSION}" "Removing logs."
+		rm -f ${GB_VERSION}/logs/*.log
+
+
 		gb_checkContainer ${GB_CONTAINERVERSION}
 		case ${STATE} in
 			'STARTED')
@@ -261,10 +280,6 @@ gb_clean() {
 				p_warn "${GB_IMAGEVERSION}" "Image already removed."
 				;;
 		esac
-
-
-		p_info "${GB_IMAGEVERSION}" "Removing logs."
-		rm -f "${GB_VERSION}/logs/*.log"
 	done
 
 	return 0
@@ -279,22 +294,13 @@ gb_build() {
 	fi
 	p_ok "${FUNCNAME[0]}" "#### Building image for versions: ${GB_VERSIONS}"
 
-	case ${ARCH} in
-		'Linux')
-			LOG_ARGS='-t 10'
-			;;
-		*)
-			LOG_ARGS='-r -t 10'
-			;;
-	esac
 
 	for GB_VERSION in ${GB_VERSIONS}
 	do
 		gb_getenv ${GB_VERSION}
 
-		LOGDIR="${GB_VERSION}/logs"
-		# LOGFILE="${LOGDIR}/$(date +'%Y%m%d-%H%M%S').log"
-		LOGFILE="${LOGDIR}/${GB_NAME}.log"
+		# LOGFILE="${GB_VERSION}/logs/$(date +'%Y%m%d-%H%M%S').log"
+		LOGFILE="${GB_VERSION}/logs/build.log"
 
 		if [ "${GB_REF}" == "base" ]
 		then
@@ -426,22 +432,13 @@ gb_list() {
 	then
 		return 1
 	fi
-	p_ok "${FUNCNAME[0]}" "#### Listing image and container for versions: ${GB_VERSIONS}"
 
-	for GB_VERSION in ${GB_VERSIONS}
-	do
-		gb_getenv ${GB_VERSION}
+	p_ok "${FUNCNAME[0]}" "#### Listing images for ${GB_IMAGENAME}"
+	docker image ls "${GB_IMAGENAME}:*"
 
-		p_info "${GB_IMAGEMAJORVERSION}" "List image."
-		docker image ls ${GB_IMAGEMAJORVERSION}
-		p_info "${GB_IMAGEVERSION}" "List image."
-		docker image ls ${GB_IMAGEVERSION}
+	p_ok "${FUNCNAME[0]}" "#### Listing containers for ${GB_NAME}"
+	docker container ls -a -s -f name="^${GB_NAME}-"
 
-		echo "# Gearbox[${GB_CONTAINERMAJORVERSION}]: List container."
-		docker container ls -a -f name="^${GB_CONTAINERMAJORVERSION}"
-		p_info "${GB_CONTAINERVERSION}" "List container."
-		docker container ls -a -f name="^${GB_CONTAINERVERSION}"
-	done
 	return 0
 }
 
@@ -456,12 +453,12 @@ gb_logs() {
 
 	for GB_VERSION in ${GB_VERSIONS}
 	do
-		gb_getenv ${VERSION}
+		gb_getenv ${GB_VERSION}
 
-		if [ -f "${VERSION}/logs/${GB_NAME}.log" ]
+		if [ -f "${GB_VERSION}/logs/${GB_NAME}.log" ]
 		then
 			p_info "${GB_IMAGEMAJORVERSION}" "Showing logs."
-			script -dp "${VERSION}/logs/${GB_NAME}.log" | less -SinR
+			script -dp "${GB_VERSION}/logs/${GB_NAME}.log" | less -SinR
 		else
 			p_warn "${GB_IMAGEMAJORVERSION}" "No logs."
 		fi
@@ -573,8 +570,7 @@ gb_release() {
 
 	gb_clean ${GB_VERSIONS} && \
 		gb_build ${GB_VERSIONS} && \
-		gb_test ${GB_VERSIONS} && \
-		gb_push ${GB_VERSIONS}
+		gb_test ${GB_VERSIONS}
 
 	return 0
 }
@@ -807,7 +803,15 @@ gb_test() {
 					p_info "${GB_CONTAINERVERSION}" "Running unit-tests."
 					PORT="$(docker port ${GB_CONTAINERVERSION} 22/tcp | sed 's/0.0.0.0://')"
 
-					if ssh -p ${PORT} -o StrictHostKeyChecking=no gearbox@localhost /etc/gearbox/unit-tests/run.sh
+					# LOGFILE="${GB_VERSION}/logs/$(date +'%Y%m%d-%H%M%S').log"
+					LOGFILE="${GB_VERSION}/logs/test.log"
+
+					#if [ "${GITHUB_ACTIONS}" == "" ]
+					#then
+					#	script ${LOG_ARGS} ${LOGFILE}
+					#fi
+
+					if ssh -p ${PORT} -o StrictHostKeyChecking=no gearbox@localhost /etc/gearbox/unit-tests/run.sh 2>&1 | tee ${LOGFILE}
 					then
 						FAILED=""
 						break
