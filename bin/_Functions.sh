@@ -309,6 +309,7 @@ gb_build() {
 
 		elif [ "${GB_REF}" != "" ]
 		then
+			echo "HEY: ${GB_REF}"
 			DOCKER_ARGS=""
 			p_info "${GB_IMAGENAME}:${GB_VERSION}" "Pull ref container."
 			docker pull "${GB_REF}"
