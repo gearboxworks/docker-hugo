@@ -304,10 +304,12 @@ gb_build() {
 
 		if [ "${GB_REF}" == "base" ]
 		then
+			DOCKER_ARGS="--squash"
 			p_info "${GB_IMAGENAME}:${GB_VERSION}" "This is a base container."
 
 		elif [ "${GB_REF}" != "" ]
 		then
+			DOCKER_ARGS=""
 			p_info "${GB_IMAGENAME}:${GB_VERSION}" "Pull ref container."
 			docker pull "${GB_REF}"
 			p_info "${GB_IMAGENAME}:${GB_VERSION}" "Query ref container."
@@ -321,11 +323,11 @@ gb_build() {
 		if [ "${GITHUB_ACTIONS}" == "" ]
 		then
 			script ${LOG_ARGS} ${LOGFILE} \
-				docker build -t ${GB_IMAGENAME}:${GB_VERSION} -f ${GB_DOCKERFILE} --build-arg GEARBOX_ENTRYPOINT --build-arg GEARBOX_ENTRYPOINT_ARGS .
+				docker build -t ${GB_IMAGENAME}:${GB_VERSION} -f ${GB_DOCKERFILE} --build-arg GEARBOX_ENTRYPOINT --build-arg GEARBOX_ENTRYPOINT_ARGS ${DOCKER_ARGS} .
 			p_info "${GB_IMAGENAME}:${GB_VERSION}" "Log file saved to \"${LOGFILE}\""
 		fi
 
-		docker build -t ${GB_IMAGENAME}:${GB_VERSION} -f ${GB_DOCKERFILE} --build-arg GEARBOX_ENTRYPOINT --build-arg GEARBOX_ENTRYPOINT_ARGS .
+		docker build -t ${GB_IMAGENAME}:${GB_VERSION} -f ${GB_DOCKERFILE} --build-arg GEARBOX_ENTRYPOINT --build-arg GEARBOX_ENTRYPOINT_ARGS ${DOCKER_ARGS} .
 
 		if [ "${GB_MAJORVERSION}" != "" ]
 		then

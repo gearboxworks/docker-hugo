@@ -1,17 +1,17 @@
-{{ $version := FindInMap .Json.versions .Env.VERSION }}
-{{ if not $version }}
+{{- $version := FindInMap .Json.versions .Env.VERSION }}
+{{- if not $version }}
 ################################################################################
 # No version
 
-{{ else if not $version.base }}
+{{- else if not $version.base }}
 ################################################################################
 # No base
 
-{{ else if not .Json.name }}
+{{- else if not .Json.name }}
 ################################################################################
 # No name
 
-{{ else if not $version.ref }}
+{{- else if not $version.ref }}
 ################################################################################
 # {{ .CreationWarning }}
 # {{ .CreationInfo }}
@@ -34,14 +34,25 @@ ENV GEARBOX_ENTRYPOINT_ARGS ${GEARBOX_ENTRYPOINT_ARGS}
 LABEL gearbox.json='{{ .JsonString }}'
 LABEL gearbox.version='{{ .Env.VERSION }}'
 ENV GEARBOX_VERSION "{{ .Env.VERSION }}"
-{{ range $k, $v := .Json }}{{ if eq $k "versions" }}# SKIP {{ $k }}{{ else if eq $k "env" }}# SKIP {{ $k }}{{ else }}LABEL container.{{ $k }}="{{ $v }}"
-ENV GEARBOX_{{ $k | ToUpper }} "{{ $v }}"{{ end }}
-{{ end }}
-{{ range $k, $v := $version }}LABEL container.{{ $k }}="{{ $v }}"
+{{- range $k, $v := .Json }}
+	{{- if eq $k "versions" }}
+# SKIP {{ $k }}
+	{{- else if eq $k "env" }}
+# SKIP {{ $k }}
+	{{- else }}
+LABEL container.{{ $k }}="{{ $v }}"
 ENV GEARBOX_{{ $k | ToUpper }} "{{ $v }}"
-{{ end }}
-{{ range $k, $v := .Json.env }}ENV {{ $k | ToUpper }} "{{ $v }}"
-{{ end }}
+	{{- end }}
+{{- end }}
+
+{{- range $k, $v := $version }}
+LABEL container.{{ $k }}="{{ $v }}"
+ENV GEARBOX_{{ $k | ToUpper }} "{{ $v }}"
+{{- end }}
+
+{{- range $k, $v := .Json.env }}
+ENV {{ $k | ToUpper }} "{{ $v }}"
+{{- end }}
 
 # 3. Now copy the local files specific to this container.
 COPY build /etc/gearbox
@@ -61,7 +72,7 @@ WORKDIR /home/gearbox/projects
 # END
 ################################################################################
 
-{{ else if eq $version.ref "base" }}
+{{- else if eq $version.ref "base" }}
 ################################################################################
 # {{ .CreationWarning }}
 # {{ .CreationInfo }}
@@ -79,19 +90,31 @@ ARG VERSION
 MAINTAINER {{ with .Json.maintainer }}{{ . }}{{ else }}Unknown{{ end }}
 ENV GEARBOX_CONTAINER_NAME "docker-{{ .Json.name }}"
 ENV GEARBOX_CONTAINER_VERSION ${VERSION}
-# ENV GEARBOX_ENTRYPOINT ${GEARBOX_ENTRYPOINT}
-# ENV GEARBOX_ENTRYPOINT_ARGS ${GEARBOX_ENTRYPOINT_ARGS}
 LABEL gearbox.json='{{ .JsonString }}'
 LABEL gearbox.version='{{ .Env.VERSION }}'
 ENV GEARBOX_VERSION "{{ .Env.VERSION }}"
-{{ range $k, $v := .Json }}{{ if eq $k "versions" }}# SKIP {{ $k }}{{ else if eq $k "env" }}# SKIP {{ $k }}{{ else }}LABEL container.{{ $k }}="{{ $v }}"
-ENV GEARBOX_{{ $k | ToUpper }} "{{ $v }}"{{ end }}
-{{ end }}
-{{ range $k, $v := $version }}LABEL container.{{ $k }}="{{ $v }}"
+ENV GEARBOX_BASE_VERSION "{{ .Env.VERSION }}"
+ENV GEARBOX_BASE_REF "{{ $version.ref }}"
+
+{{- range $k, $v := .Json }}
+	{{- if eq $k "versions" }}
+# SKIP {{ $k }}
+	{{- else if eq $k "env" }}
+# SKIP {{ $k }}
+	{{- else }}
+LABEL container.{{ $k }}="{{ $v }}"
 ENV GEARBOX_{{ $k | ToUpper }} "{{ $v }}"
-{{ end }}
-{{ range $k, $v := .Json.env }}ENV {{ $k | ToUpper }} "{{ $v }}"
-{{ end }}
+	{{- end }}
+{{- end }}
+
+{{- range $k, $v := $version }}
+LABEL container.{{ $k }}="{{ $v }}"
+ENV GEARBOX_{{ $k | ToUpper }} "{{ $v }}"
+{{- end }}
+
+{{- range $k, $v := .Json.env }}
+ENV {{ $k | ToUpper }} "{{ $v }}"
+{{- end }}
 
 # 3. Now copy the local files specific to this container.
 COPY build /etc/gearbox
@@ -112,7 +135,7 @@ CMD ["/init"]
 # END
 ################################################################################
 
-{{ else }}
+{{- else }}
 ################################################################################
 # {{ .CreationWarning }}
 # {{ .CreationInfo }}
@@ -142,14 +165,25 @@ ENV GEARBOX_ENTRYPOINT_ARGS ${GEARBOX_ENTRYPOINT_ARGS}
 LABEL gearbox.json='{{ .JsonString }}'
 LABEL gearbox.version='{{ .Env.VERSION }}'
 ENV GEARBOX_VERSION "{{ .Env.VERSION }}"
-{{ range $k, $v := .Json }}{{ if eq $k "versions" }}# SKIP {{ $k }}{{ else if eq $k "env" }}# SKIP {{ $k }}{{ else }}LABEL container.{{ $k }}="{{ $v }}"
-ENV GEARBOX_{{ $k | ToUpper }} "{{ $v }}"{{ end }}
-{{ end }}
-{{ range $k, $v := $version }}LABEL container.{{ $k }}="{{ $v }}"
+{{- range $k, $v := .Json }}
+	{{- if eq $k "versions" }}
+# SKIP {{ $k }}
+	{{- else if eq $k "env" }}
+# SKIP {{ $k }}
+	{{- else }}
+LABEL container.{{ $k }}="{{ $v }}"
 ENV GEARBOX_{{ $k | ToUpper }} "{{ $v }}"
-{{ end }}
-{{ range $k, $v := .Json.env }}ENV {{ $k | ToUpper }} "{{ $v }}"
-{{ end }}
+	{{- end }}
+{{- end }}
+
+{{- range $k, $v := $version }}
+LABEL container.{{ $k }}="{{ $v }}"
+ENV GEARBOX_{{ $k | ToUpper }} "{{ $v }}"
+{{- end }}
+
+{{- range $k, $v := .Json.env }}
+ENV {{ $k | ToUpper }} "{{ $v }}"
+{{- end }}
 
 # 5. Now copy the local files specific to this container.
 COPY build /etc/gearbox
@@ -171,4 +205,4 @@ CMD ["/init"]
 # END
 ################################################################################
 
-{{ end }}
+{{- end }}

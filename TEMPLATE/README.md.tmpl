@@ -12,10 +12,19 @@ GitHub release(latest): ![last-release-date](https://img.shields.io/github/relea
 
 
 ## Supported versions and respective Dockerfiles
-| Service | GitHub Version | Docker Version | Docker Size | Docker Tags | Dockerfile |
-| ------- | -------------- | -------------- | ----------- | ----------- | ---------- |
-{{ range $key, $value := .Json.versions }}| {{ if $.Json.refurl }}[{{ $.Json.name }}]({{ $.Json.refurl }}){{ else }}{{ $.Json.name }}{{ end }} | ![{{ $.Json.name }}](https://img.shields.io/badge/{{ $.Json.name }}-{{ $key }}-green.svg) | ![Docker Version)](https://img.shields.io/docker/v/gearboxworks/{{ $.Json.name }}/{{ $key }}) | ![Docker Size](https://img.shields.io/docker/image-size/gearboxworks/{{ $.Json.name }}/{{ $key }}) | `{{ $key }}`, `{{ $value.majorversion }}`{{ with $value.latest }}, `latest`{{ end }} | _([{{ $key }}/DockerfileRuntime](https://github.com/gearboxworks/docker-{{ $.Json.name }}/blob/master/{{ $value.majorversion }}/DockerfileRuntime))_ |
-{{ end }}
+{{- if .Json.base  }}
+|  Base   | GitHub Version | Docker Version | Docker Size | Docker Tags |
+| ------- | -------------- | -------------- | ----------- | ----------- |
+{{- range $key, $value := .Json.versions }}
+| {{ if $.Json.refurl }}[{{ $.Json.name }}]({{ $.Json.refurl }}){{ else }}{{ $.Json.name }}{{ end }} | ![{{ $.Json.name }}](https://img.shields.io/badge/{{ $key }}-green.svg) | ![Docker Version)](https://img.shields.io/docker/v/gearboxworks/{{ $.Json.name }}/{{ $key }}) | ![Docker Size](https://img.shields.io/docker/image-size/gearboxworks/{{ $.Json.name }}/{{ $key }}) | _([`{{ $key }}`{{ with $value.majorversion }}, `{{ . }}`{{ end }}{{ with $value.latest }}, `latest`{{ end }}](https://github.com/gearboxworks/docker-{{ $.Json.name }}/blob/master/{{ $value.majorversion }}/DockerfileRuntime))_ |
+{{- end }}
+{{- else }}
+| Service | GitHub Version | Docker Version | Docker Size | Docker Tags |
+| ------- | -------------- | -------------- | ----------- | ----------- |
+{{- range $key, $value := .Json.versions }}
+| {{ if $.Json.refurl }}[{{ $.Json.name }}]({{ $.Json.refurl }}){{ else }}{{ $.Json.name }}{{ end }} | ![{{ $.Json.name }}](https://img.shields.io/badge/{{ $.Json.name }}-{{ $key }}-green.svg) | ![Docker Version)](https://img.shields.io/docker/v/gearboxworks/{{ $.Json.name }}/{{ $key }}) | ![Docker Size](https://img.shields.io/docker/image-size/gearboxworks/{{ $.Json.name }}/{{ $key }}) | _([`{{ $key }}`{{ with $value.majorversion }}, `{{ . }}`{{ end }}{{ with $value.latest }}, `latest`{{ end }}](https://github.com/gearboxworks/docker-{{ $.Json.name }}/blob/master/{{ $value.majorversion }}/DockerfileRuntime))_ |
+{{- end }}
+{{- end }}
 
 
 ## Using this container.
