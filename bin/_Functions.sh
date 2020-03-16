@@ -457,10 +457,10 @@ gb_logs() {
 	do
 		gb_getenv ${GB_VERSION}
 
-		if [ -f "${GB_VERSION}/logs/${GB_NAME}.log" ]
+		if [ -f "${GB_VERSION}/logs/build.log" ]
 		then
 			p_info "${GB_IMAGEMAJORVERSION}" "Showing logs."
-			script -dp "${GB_VERSION}/logs/${GB_NAME}.log" | less -SinR
+			script -dp "${GB_VERSION}/logs/build.log" | less -SinR
 		else
 			p_warn "${GB_IMAGEMAJORVERSION}" "No logs."
 		fi
@@ -570,9 +570,12 @@ gb_release() {
 	fi
 	p_ok "${FUNCNAME[0]}" "#### Releasing for versions: ${GB_VERSIONS}"
 
-	gb_clean ${GB_VERSIONS} && \
-		gb_build ${GB_VERSIONS} && \
-		gb_test ${GB_VERSIONS}
+	for GB_VERSION in ${GB_VERSIONS}
+	do
+		gb_clean ${GB_VERSION} && \
+		gb_build ${GB_VERSION} && \
+		gb_test ${GB_VERSION}
+	done
 
 	return 0
 }

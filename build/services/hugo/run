@@ -1,28 +1,54 @@
-#!/bin/bash
+#!/bin/bash -l
+# WARNING: This file has been auto-generated. DO NOT EDIT: WARNING
+# Created on 2020-03-16T11:11:36+1100, using template:run.tmpl and json:gearbox.json
 
-echo "Hugo running"
-export HUGO_BIN="/usr/local/bin/hugo-extended"
-export HUGO_SRCDIR="/home/gearbox/projects/default/hugo"
-export HUGO_PUBLISHDIR="/home/gearbox/projects/default/www"
+c_ok "Starting."
 
-if [ ! -d "${HUGO_SRCDIR}" ]
+cd /home/gearbox/projects/default
+
+GBEP="$(which ${GEARBOX_ENTRYPOINT})"
+if [ "${GBEP}" != "" ]
 then
-	rsync -HvaxP /hugo/ ${HUGO_SRCDIR}/
-fi
-
-cd /home/gearbox/projects/default/hugo
-if [ -f config.toml ]
-then
-	echo "# Config file found."
-
-elif [[ config.toml.tmpl -nt config.toml ]]
-then
-	echo "# Template hasn't changed - no update."
-
+	${GEARBOX_ENTRYPOINT_ARGS} ${GEARBOX_ARGS}
 else
-	echo "# Template has changed - updating."
-	# JsonToConfig -json config.toml.json -template config.toml.tmpl -out config.toml
-fi
+	# Add your service entry here, if no entrypoint defined in the ref container.
+	GBRUN="$(which ${GEARBOX_RUN})"
+	if [ "${GBRUN}" != "" ]
+	then
+		# ${GBRUN} ${GEARBOX_ARGS}
+		export HUGO_BIN="/usr/local/bin/hugo-extended"
 
-su - gearbox -s /bin/bash --preserve-environment -c "${HUGO_BIN} server -D --verbose --minify --bind=\"0.0.0.0\" --port=1313 --destination=\"${HUGO_PUBLISHDIR}\" --renderToDisk"
+		if [ "${HUGO_SRCDIR}" == "" ]
+		then
+			export HUGO_SRCDIR="/home/gearbox/projects/default/hugo"
+		fi
+
+		if [ "${HUGO_PUBLISHDIR}" == "" ]
+		then
+			export HUGO_PUBLISHDIR="/home/gearbox/projects/default/www"
+		fi
+
+		if [ ! -d "${HUGO_SRCDIR}" ]
+		then
+			rsync -HvaxP /hugo/ ${HUGO_SRCDIR}/
+		fi
+
+		cd /home/gearbox/projects/default/hugo
+		if [ -f config.toml ]
+		then
+			c_ok "# HUGO config file found."
+
+		elif [[ config.toml.tmpl -nt config.toml ]]
+		then
+			c_ok "# HUGO template hasn't changed - no update."
+
+		else
+			c_ok "# HUGO template has changed - updating."
+			# JsonToConfig -json config.toml.json -template config.toml.tmpl -out config.toml
+		fi
+
+		c_ok "# HUGO - starting."
+		su - gearbox -s /bin/bash --preserve-environment -c "${HUGO_BIN} server -D --verbose --minify --bind=\"0.0.0.0\" --port=1313 --destination=\"${HUGO_PUBLISHDIR}\" --renderToDisk"
+	fi
+fi
 

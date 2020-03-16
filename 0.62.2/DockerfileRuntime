@@ -1,0 +1,78 @@
+
+################################################################################
+# WARNING: This file has been auto-generated. DO NOT EDIT: WARNING
+# Created on 2020-03-17T09:43:20+1100, using template:DockerfileRuntime.tmpl and json:gearbox.json
+# Plain Docker container for docker-hugo based off gearboxworks/gearbox-base:alpine-3.10
+
+ARG VERSION=0.62.2
+
+# 1. First reference the gearbox-base image.
+FROM gearboxworks/gearbox-base:alpine-3.10
+ARG VERSION
+ARG GEARBOX_ENTRYPOINT
+ARG GEARBOX_ENTRYPOINT_ARGS
+
+# 2. Set up env variables.
+MAINTAINER Gearbox Team <team@gearbox.works>
+ENV GEARBOX_CONTAINER_NAME "docker-hugo"
+ENV GEARBOX_CONTAINER_VERSION ${VERSION}
+ENV GEARBOX_ENTRYPOINT ${GEARBOX_ENTRYPOINT}
+ENV GEARBOX_ENTRYPOINT_ARGS ${GEARBOX_ENTRYPOINT_ARGS}
+LABEL gearbox.json='{"state": "production","organization": "gearboxworks","name": "hugo","maintainer": "Gearbox Team <team@gearbox.works>","class": "webserver","network": "--network gearboxnet","ports": ["80","1313"],"volumes": "","restart": "--restart no","run": "","args": "","env": {"HUGO_USER": "gearbox","HUGO_SRCDIR": "/home/gearbox/projects/default/hugo","HUGO_PUBLISHDIR": "/home/gearbox/projects/default/www"},"refurl": "https://www.hugo.org/","versions": {"0.67.1": {"majorversion": "0.67","latest": true,"ref": "","base": "gearboxworks/gearbox-base:alpine-3.10"},"0.66": {"majorversion": "","latest": false,"ref": "","base": "gearboxworks/gearbox-base:alpine-3.10"},"0.65.3": {"majorversion": "0.65","latest": false,"ref": "","base": "gearboxworks/gearbox-base:alpine-3.10"},"0.64.1": {"majorversion": "0.64","latest": false,"ref": "","base": "gearboxworks/gearbox-base:alpine-3.10"},"0.63.2": {"majorversion": "0.63","latest": false,"ref": "","base": "gearboxworks/gearbox-base:alpine-3.10"},"0.62.2": {"majorversion": "0.62","latest": false,"ref": "","base": "gearboxworks/gearbox-base:alpine-3.10"},"0.60.1": {"majorversion": "0.60","latest": false,"ref": "","base": "gearboxworks/gearbox-base:alpine-3.10"}}}'
+LABEL gearbox.version='0.62.2'
+ENV GEARBOX_VERSION "0.62.2"
+LABEL container.args=""
+ENV GEARBOX_ARGS ""
+LABEL container.class="webserver"
+ENV GEARBOX_CLASS "webserver"
+# SKIP env
+LABEL container.maintainer="Gearbox Team <team@gearbox.works>"
+ENV GEARBOX_MAINTAINER "Gearbox Team <team@gearbox.works>"
+LABEL container.name="hugo"
+ENV GEARBOX_NAME "hugo"
+LABEL container.network="--network gearboxnet"
+ENV GEARBOX_NETWORK "--network gearboxnet"
+LABEL container.organization="gearboxworks"
+ENV GEARBOX_ORGANIZATION "gearboxworks"
+LABEL container.ports="[80 1313]"
+ENV GEARBOX_PORTS "[80 1313]"
+LABEL container.refurl="https://www.hugo.org/"
+ENV GEARBOX_REFURL "https://www.hugo.org/"
+LABEL container.restart="--restart no"
+ENV GEARBOX_RESTART "--restart no"
+LABEL container.run=""
+ENV GEARBOX_RUN ""
+LABEL container.state="production"
+ENV GEARBOX_STATE "production"
+# SKIP versions
+LABEL container.volumes=""
+ENV GEARBOX_VOLUMES ""
+LABEL container.base="gearboxworks/gearbox-base:alpine-3.10"
+ENV GEARBOX_BASE "gearboxworks/gearbox-base:alpine-3.10"
+LABEL container.latest="false"
+ENV GEARBOX_LATEST "false"
+LABEL container.majorversion="0.62"
+ENV GEARBOX_MAJORVERSION "0.62"
+LABEL container.ref=""
+ENV GEARBOX_REF ""
+ENV HUGO_PUBLISHDIR "/home/gearbox/projects/default/www"
+ENV HUGO_SRCDIR "/home/gearbox/projects/default/hugo"
+ENV HUGO_USER "gearbox"
+
+# 3. Now copy the local files specific to this container.
+COPY build /etc/gearbox
+COPY ${VERSION}/build /etc/gearbox
+COPY ${VERSION}/gearbox.json /etc/gearbox/gearbox.json
+
+# 4. Run the base.sh script to set everything up.
+RUN /bin/sh /etc/gearbox/build/base.sh
+
+# 5. Run the hugo.sh script to set everything up.
+RUN /bin/sh /etc/gearbox/build/hugo.sh
+
+# 6. Expose ports.
+EXPOSE 22 9970 80 1313 
+WORKDIR /home/gearbox/projects
+
+# END
+################################################################################

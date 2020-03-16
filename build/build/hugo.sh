@@ -30,9 +30,11 @@ fi
 cd /usr/local/bin
 wget -qO- https://bin.equinox.io/c/dhgbqpS8Bvy/minify-stable-linux-amd64.tgz | tar -xz; checkExit
 
+c_info "Downloading: https://github.com/gohugoio/hugo/releases/download/v${VERSION}/hugo_extended_${VERSION}_linux-64bit.tar.gz"
 wget -qO- https://github.com/gohugoio/hugo/releases/download/v${VERSION}/hugo_extended_${VERSION}_linux-64bit.tar.gz | tar -xz; checkExit
 mv -i hugo hugo-extended; checkExit
 
+c_info "Downloading: https://github.com/gohugoio/hugo/releases/download/v${VERSION}/hugo_${VERSION}_linux-64bit.tar.gz"
 wget -qO- https://github.com/gohugoio/hugo/releases/download/v${VERSION}/hugo_${VERSION}_linux-64bit.tar.gz | tar -xz; checkExit
 
 chmod a+x /usr/local/bin/*; checkExit
