@@ -5,50 +5,48 @@
 {{ if not $version }}
 # No version found in gearbox.json
 
-{{ else if not .Json.name }}
+{{ else if not .Json.meta.name }}
 # No name found in gearbox.json
 
 {{ else }}
 VERSION="{{ .Env.GB_VERSION }}"
 export VERSION
 
-if [ -d "${VERSION}" ]
+GB_VERDIR="versions/{{ .Env.GB_VERSION }}"
+export GB_VERDIR
+
+if [ -d "${GB_VERDIR}" ]
 then
-	echo "Gearbox: Release version directory ${VERSION} already exists."
+	echo "Gearbox: Release version directory ${GB_VERDIR} already exists."
 	exit 1
 fi
 
 ################################################################################
 # Maybe we have rsync, maybe we don't.
-mkdir "${VERSION}"
+mkdir -p "${GB_VERDIR}"
+mkdir -p "${GB_VERDIR}/logs"
 
 RSYNC="$(which rsync)"
 if [ "${RSYNC}" != "" ]
 then
-	rsync -HvaxP TEMPLATE/version/ "${VERSION}/"
+	rsync -HvaxP TEMPLATE/version/ "${GB_VERDIR}/"
 else
-	tar cf - -C TEMPLATE/version . | tar xvf - -C "${VERSION}"
+	tar cf - -C TEMPLATE/version . | tar xvf - -C "${GB_VERDIR}"
 fi
 
 ################################################################################
-if [ -f "{{ $.JsonFile.Dir }}/{{ $.JsonFile.Name }}" ]
-then
-	cp "{{ $.JsonFile.Dir }}/{{ $.JsonFile.Name }}" "${VERSION}/gearbox.json"
-fi
-
-################################################################################
-TMPLDIRS="$(find ${VERSION}/ -name '*JSON_NAME*')"
+TMPLDIRS="$(find ${GB_VERDIR}/ -name '*JSON_NAME*')"
 for dir in ${TMPLDIRS}
 do
-	NEWDIR="$(echo -n "${dir}" | sed 's/JSON_NAME/{{ $.Json.name }}/')"
+	NEWDIR="$(echo -n "${dir}" | sed 's/JSON_NAME/{{ $.Json.meta.name }}/')"
 	mv -i "${dir}" "${NEWDIR}"
 done
 
 ################################################################################
-TMPLFILES="$(find ${VERSION}/ -name '*\.tmpl')"
+TMPLFILES="$(find ${GB_VERDIR}/ -name '*\.tmpl')"
 for file in ${TMPLFILES}
 do
-	OUTFILE="$(echo -n "${file}" | sed 's/JSON_NAME/{{ $.Json.name }}/')"
+	OUTFILE="$(echo -n "${file}" | sed 's/JSON_NAME/{{ $.Json.meta.name }}/')"
 	if [ "${file}" != "${OUTFILE}" ]
 	then
 		mv -i "${file}" "${OUTFILE}"
@@ -58,7 +56,8 @@ do
 	{{ $.ExecName }} -json "{{ $.JsonFile.Dir }}/{{ $.JsonFile.Name }}" -create "${OUTFILE}"
 done
 
-find ${VERSION}/rootfs/etc/gearbox/services -type f | xargs chmod 755
-find ${VERSION}/ -name '*\.sh' | xargs chmod 755
+find ${GB_VERDIR}/rootfs/etc/gearbox/services -type f | xargs chmod 755
+find ${GB_VERDIR}/ -name '*\.sh' | xargs chmod 755
+
 {{ end }}
 # END

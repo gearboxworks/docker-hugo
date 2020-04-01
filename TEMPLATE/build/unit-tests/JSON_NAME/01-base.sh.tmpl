@@ -1,7 +1,7 @@
 #!/bin/bash
 # {{ .CreationInfo }}
 
-p_info "{{ .Json.name }}" "Release test started."
+p_info "{{ .Json.meta.name }}" "Release test started."
 
 if id -u gearbox
 then
@@ -17,5 +17,5 @@ else
 	c_err "Gearbox group NOT found."
 fi
 
-p_info "{{ .Json.name }}" "Release test finished."
+p_info "{{ .Json.meta.name }}" "Release test finished."
 

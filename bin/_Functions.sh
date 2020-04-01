@@ -20,13 +20,15 @@ GB_JSONFILE="${GB_BASEDIR}/gearbox.json"
 
 if [ -f "${GB_JSONFILE}" ]
 then
-	GB_VERSIONS="$(${GB_BINFILE} -json ${GB_JSONFILE} -template-string '{{ range $version, $value := .Json.versions }}{{ $version }} {{ end }}')"
+	GB_VERSIONS="$(${GB_BINFILE} -json ${GB_JSONFILE} -template-string '{{ range $version, $value := .Json.versions }}{{ if ne $version "" }}{{ $version }}{{ end }} {{ end }}')"
 	GB_VERSIONS="$(echo ${GB_VERSIONS})"	# Easily remove CR
 
-	GB_IMAGENAME="$(${GB_BINFILE} -json ${GB_JSONFILE} -template-string '{{ .Json.organization }}/{{ .Json.name }}')"
+	GB_IMAGENAME="$(${GB_BINFILE} -json ${GB_JSONFILE} -template-string '{{ .Json.meta.organization }}/{{ .Json.meta.name }}')"
 
-	GB_NAME="$(${GB_BINFILE} -json ${GB_JSONFILE} -template-string '{{ .Json.name }}')"
+	GB_NAME="$(${GB_BINFILE} -json ${GB_JSONFILE} -template-string '{{ .Json.meta.name }}')"
 fi
+
+GB_BASE="$(${GB_BINFILE} -json gearbox.json -template-string '{{ .Json.build.base }}')"
 
 GITBIN="$(which git)"
 GB_GITURL="$(${GITBIN} config --get remote.origin.url)"
@@ -87,21 +89,33 @@ _getVersions() {
 ################################################################################
 _listVersions() {
 	echo "	all - All versions"
-	${GB_BINFILE} -json ${GB_JSONFILE} -template-string '{{ range $version, $value := .Json.versions }}\t{{ $version }} - {{ $.Json.organization }}/{{ $.Json.name }}:{{ $version }}\n{{ end }}'
+	${GB_BINFILE} -json ${GB_JSONFILE} -template-string '{{ range $version, $value := .Json.versions }}{{ if ne $version "" }}\t{{ $version }} - {{ $.Json.meta.organization }}/{{ $.Json.meta.name }}:{{ $version }}\n{{ end }}{{ end }}'
 	echo ""
 }
 
 
 ################################################################################
 gb_getenv() {
-	VERSION_DIR="$1"
-	if [ -f "${VERSION_DIR}/.env.tmpl" ]
-	then
-		# DIR="$(./bin/JsonToConfig-${ARCH} -json "${GB_JSONFILE}" -template-string '{{ .Json.version }}')"
-		${GB_BINFILE} -json "${GB_JSONFILE}" -template "${VERSION_DIR}/.env.tmpl" -out "${VERSION_DIR}/.env"
-	fi
+	GB_VERDIR="${GB_BASEDIR}/versions/$1"
+	export GB_VERDIR
 
-	. "${VERSION_DIR}/.env"
+	if [ -f "TEMPLATE/version/.env.tmpl" ]
+	then
+		${GB_BINFILE} -json "${GB_JSONFILE}" -template "TEMPLATE/version/.env.tmpl" -out "${GB_VERDIR}/.env"
+	fi
+	. "${GB_VERDIR}/.env"
+}
+
+
+################################################################################
+gb_getdockerfile() {
+	GB_VERDIR="${GB_BASEDIR}/versions/$1"
+	export GB_VERDIR
+
+	if [ -f "TEMPLATE/version/DockerfileRuntime.tmpl" ]
+	then
+		${GB_BINFILE} -json "${GB_JSONFILE}" -template "TEMPLATE/version/DockerfileRuntime.tmpl" -out "${GB_VERDIR}/DockerfileRuntime"
+	fi
 }
 
 
@@ -162,7 +176,7 @@ gb_init() {
 
 	gb_create-build ${GB_JSONFILE}
 	gb_create-version ${GB_JSONFILE}
-	${DIR}/JsonToConfig-$(uname -s) -json "${GB_JSONFILE}" -template TEMPLATE/README.md.tmpl -out README.md
+	# ${DIR}/JsonToConfig-$(uname -s) -json "${GB_JSONFILE}" -template TEMPLATE/README.md.tmpl -out README.md
 
 	return 0
 }
@@ -174,19 +188,26 @@ gb_create-build() {
 	then
 		return 1
 	fi
-	p_ok "${FUNCNAME[0]}" "Creating build directory."
 
 	if [ -d build ]
 	then
-		p_warn "${FUNCNAME[0]}" "Directory \"build\" already exists."
-		return 0
+		p_ok "${FUNCNAME[0]}" "Updating build directory."
+	else
+		p_ok "${FUNCNAME[0]}" "Creating build directory."
+		cp -i TEMPLATE/build.sh.tmpl .
+		${GB_BINFILE} -json ${GB_JSONFILE} -create build.sh.tmpl -shell
+		rm -f build.sh.tmpl build.sh
 	fi
 
-	cp -i TEMPLATE/build.sh.tmpl .
-	${GB_BINFILE} -json ${GB_JSONFILE} -create build.sh.tmpl -shell
-	rm -f build.sh.tmpl build.sh
-
 	${GB_BINFILE} -template ./TEMPLATE/README.md.tmpl -json ${GB_JSONFILE} -out README.md
+
+	cp ./TEMPLATE/Makefile .
+	if [ "${GB_BASE}" == "true" ]
+	then
+		cp "${GB_JSONFILE}" build/
+	else
+		cp "${GB_JSONFILE}" "build/gearbox-${GB_NAME}.json"
+	fi
 
 	return 0
 }
@@ -200,21 +221,27 @@ gb_create-version() {
 	fi
 	p_ok "${FUNCNAME[0]}" "Creating version directory for versions: ${GB_VERSIONS}"
 
-
-	${GB_BINFILE} -template ./TEMPLATE/README.md.tmpl -json ${GB_JSONFILE} -out README.md
-
 	for GB_VERSION in ${GB_VERSIONS}
 	do
-		if [ -d ${GB_VERSION} ]
+		gb_getenv ${GB_VERSION}
+
+
+		if [ -d ${GB_VERDIR} ]
 		then
-			p_warn "${FUNCNAME[0]}" "Directory \"${GB_VERSION}\" already exists."
+			p_info "${FUNCNAME[0]}" "Updating version directory \"${GB_VERSION}\"."
+			${GB_BINFILE} -json ${GB_JSONFILE} -template ./TEMPLATE/version/DockerfileRuntime.tmpl -out "${GB_VERDIR}/DockerfileRuntime"
+			${GB_BINFILE} -json ${GB_JSONFILE} -template ./TEMPLATE/version/.env.tmpl -out "${GB_VERDIR}/.env"
+			rm -f "${GB_VERDIR}/gearbox.json"
+
 		else
 			p_info "${FUNCNAME[0]}" "Creating version directory \"${GB_VERSION}\"."
 			cp -i TEMPLATE/version.sh.tmpl .
 			${GB_BINFILE} -json ${GB_JSONFILE} -create version.sh.tmpl -shell
-			rm -f version.sh.tmpl version.sh
+			rm -f version.sh.tmpl version.sh "${GB_VERDIR}/gearbox.json"
 		fi
 	done
+
+	${GB_BINFILE} -json ${GB_JSONFILE} -template ./TEMPLATE/README.md.tmpl -out README.md
 
 	return 0
 }
@@ -235,7 +262,7 @@ gb_clean() {
 
 
 		p_info "${GB_IMAGEVERSION}" "Removing logs."
-		rm -f ${GB_VERSION}/logs/*.log
+		rm -f ${GB_VERDIR}/logs/*.log
 
 
 		gb_checkContainer ${GB_CONTAINERVERSION}
@@ -280,6 +307,18 @@ gb_clean() {
 				p_warn "${GB_IMAGEVERSION}" "Image already removed."
 				;;
 		esac
+
+
+		gb_checkImage ${GB_IMAGENAME}:latest
+		case ${STATE} in
+			'PRESENT')
+				p_info "${GB_IMAGENAME}:latest" "Removing image."
+				docker image rm -f ${GB_IMAGENAME}:latest
+				;;
+			*)
+				p_warn "${GB_IMAGENAME}:latest" "Image already removed."
+				;;
+		esac
 	done
 
 	return 0
@@ -298,9 +337,11 @@ gb_build() {
 	for GB_VERSION in ${GB_VERSIONS}
 	do
 		gb_getenv ${GB_VERSION}
+		gb_getdockerfile ${GB_VERSION}
 
-		# LOGFILE="${GB_VERSION}/logs/$(date +'%Y%m%d-%H%M%S').log"
-		LOGFILE="${GB_VERSION}/logs/build.log"
+
+		# LOGFILE="${GB_VERDIR}/logs/$(date +'%Y%m%d-%H%M%S').log"
+		LOGFILE="${GB_VERDIR}/logs/build.log"
 
 		if [ "${GB_REF}" == "base" ]
 		then
@@ -309,7 +350,6 @@ gb_build() {
 
 		elif [ "${GB_REF}" != "" ]
 		then
-			echo "HEY: ${GB_REF}"
 			DOCKER_ARGS=""
 			p_info "${GB_IMAGENAME}:${GB_VERSION}" "Pull ref container."
 			docker pull "${GB_REF}"
@@ -326,13 +366,18 @@ gb_build() {
 			script ${LOG_ARGS} ${LOGFILE} \
 				docker build -t ${GB_IMAGENAME}:${GB_VERSION} -f ${GB_DOCKERFILE} --build-arg GEARBOX_ENTRYPOINT --build-arg GEARBOX_ENTRYPOINT_ARGS ${DOCKER_ARGS} .
 			p_info "${GB_IMAGENAME}:${GB_VERSION}" "Log file saved to \"${LOGFILE}\""
+		else
+			docker build -t ${GB_IMAGENAME}:${GB_VERSION} -f ${GB_DOCKERFILE} --build-arg GEARBOX_ENTRYPOINT --build-arg GEARBOX_ENTRYPOINT_ARGS ${DOCKER_ARGS} .
 		fi
-
-		docker build -t ${GB_IMAGENAME}:${GB_VERSION} -f ${GB_DOCKERFILE} --build-arg GEARBOX_ENTRYPOINT --build-arg GEARBOX_ENTRYPOINT_ARGS ${DOCKER_ARGS} .
 
 		if [ "${GB_MAJORVERSION}" != "" ]
 		then
 			docker tag ${GB_IMAGENAME}:${GB_VERSION} ${GB_IMAGENAME}:${GB_MAJORVERSION}
+		fi
+
+		if [ "${GB_LATEST}" == "true" ]
+		then
+			docker tag ${GB_IMAGENAME}:${GB_VERSION} ${GB_IMAGENAME}:latest
 		fi
 	done
 
@@ -458,10 +503,10 @@ gb_logs() {
 	do
 		gb_getenv ${GB_VERSION}
 
-		if [ -f "${GB_VERSION}/logs/build.log" ]
+		if [ -f "${GB_VERDIR}/logs/build.log" ]
 		then
 			p_info "${GB_IMAGEMAJORVERSION}" "Showing logs."
-			script -dp "${GB_VERSION}/logs/build.log" | less -SinR
+			script -dp "${GB_VERDIR}/logs/build.log" | less -SinR
 		else
 			p_warn "${GB_IMAGEMAJORVERSION}" "No logs."
 		fi
@@ -522,6 +567,12 @@ gb_dockerhub() {
 		docker push ${GB_IMAGEVERSION}
 		p_info "${GB_IMAGEMAJORVERSION}" "Pushing image to DockerHub."
 		docker push ${GB_IMAGEMAJORVERSION}
+
+		if [ "${GB_LATEST}" == "true" ]
+		then
+			p_info "${GB_IMAGENAME}:latest" "Pushing image to DockerHub."
+			docker push "${GB_IMAGENAME}:latest"
+		fi
 	done
 
 	return 0
@@ -809,8 +860,8 @@ gb_test() {
 					p_info "${GB_CONTAINERVERSION}" "Running unit-tests."
 					PORT="$(docker port ${GB_CONTAINERVERSION} 22/tcp | sed 's/0.0.0.0://')"
 
-					# LOGFILE="${GB_VERSION}/logs/$(date +'%Y%m%d-%H%M%S').log"
-					LOGFILE="${GB_VERSION}/logs/test.log"
+					# LOGFILE="${GB_VERDIR}/logs/$(date +'%Y%m%d-%H%M%S').log"
+					LOGFILE="${GB_VERDIR}/logs/test.log"
 
 					#if [ "${GITHUB_ACTIONS}" == "" ]
 					#then

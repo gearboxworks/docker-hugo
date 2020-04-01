@@ -63,6 +63,8 @@ then
 	cp TEMPLATE/release.yml .github/workflows/
 	rm -rf docker-template.tgz docker-template/
 	echo "# Gearbox[docker-template]: Done."
+
+	${DIR}/JsonToConfig -template ./TEMPLATE/README.md.tmpl -json gearbox.json -out README.md
 else
 	echo "# Gearbox[docker-template]: Cannot find docker-template repository."
 fi

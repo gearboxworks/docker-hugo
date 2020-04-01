@@ -1,8 +1,8 @@
-![Gearbox](https://github.com/gearboxworks/gearbox.github.io/raw/master/Gearbox-100x.png)
+![Gearbox](https://raw.githubusercontent.com/gearboxworks/gearboxworks.github.io/master/assets/images/gearbox-logo.png)
 
 
-# hugo Docker container service [Gearbox](https://github.com/gearboxworks/)
-This is the repository for the [hugo](https://www.hugo.org/) Docker container implemented for [Gearbox](https://github.com/gearboxworks/).
+# hugo Docker container service for [Gearbox](https://github.com/gearboxworks/)
+This is the repository for the [hugo](https://gohugo.io/) Docker container implemented for [Gearbox](https://github.com/gearboxworks/).
 
 
 ## Repository Info
@@ -14,13 +14,13 @@ GitHub release(latest): ![last-release-date](https://img.shields.io/github/relea
 ## Supported versions and respective Dockerfiles
 | Service | GitHub Version | Docker Version | Docker Size | Docker Tags |
 | ------- | -------------- | -------------- | ----------- | ----------- |
-| [hugo](https://www.hugo.org/) | ![hugo](https://img.shields.io/badge/hugo-0.60.1-green.svg) | ![Docker Version)](https://img.shields.io/docker/v/gearboxworks/hugo/0.60.1) | ![Docker Size](https://img.shields.io/docker/image-size/gearboxworks/hugo/0.60.1) | _([`0.60.1`, `0.60`](https://github.com/gearboxworks/docker-hugo/blob/master/0.60/DockerfileRuntime))_ |
-| [hugo](https://www.hugo.org/) | ![hugo](https://img.shields.io/badge/hugo-0.62.2-green.svg) | ![Docker Version)](https://img.shields.io/docker/v/gearboxworks/hugo/0.62.2) | ![Docker Size](https://img.shields.io/docker/image-size/gearboxworks/hugo/0.62.2) | _([`0.62.2`, `0.62`](https://github.com/gearboxworks/docker-hugo/blob/master/0.62/DockerfileRuntime))_ |
-| [hugo](https://www.hugo.org/) | ![hugo](https://img.shields.io/badge/hugo-0.63.2-green.svg) | ![Docker Version)](https://img.shields.io/docker/v/gearboxworks/hugo/0.63.2) | ![Docker Size](https://img.shields.io/docker/image-size/gearboxworks/hugo/0.63.2) | _([`0.63.2`, `0.63`](https://github.com/gearboxworks/docker-hugo/blob/master/0.63/DockerfileRuntime))_ |
-| [hugo](https://www.hugo.org/) | ![hugo](https://img.shields.io/badge/hugo-0.64.1-green.svg) | ![Docker Version)](https://img.shields.io/docker/v/gearboxworks/hugo/0.64.1) | ![Docker Size](https://img.shields.io/docker/image-size/gearboxworks/hugo/0.64.1) | _([`0.64.1`, `0.64`](https://github.com/gearboxworks/docker-hugo/blob/master/0.64/DockerfileRuntime))_ |
-| [hugo](https://www.hugo.org/) | ![hugo](https://img.shields.io/badge/hugo-0.65.3-green.svg) | ![Docker Version)](https://img.shields.io/docker/v/gearboxworks/hugo/0.65.3) | ![Docker Size](https://img.shields.io/docker/image-size/gearboxworks/hugo/0.65.3) | _([`0.65.3`, `0.65`](https://github.com/gearboxworks/docker-hugo/blob/master/0.65/DockerfileRuntime))_ |
-| [hugo](https://www.hugo.org/) | ![hugo](https://img.shields.io/badge/hugo-0.66.0-green.svg) | ![Docker Version)](https://img.shields.io/docker/v/gearboxworks/hugo/0.66.0) | ![Docker Size](https://img.shields.io/docker/image-size/gearboxworks/hugo/0.66.0) | _([`0.66.0`, `0.66`](https://github.com/gearboxworks/docker-hugo/blob/master/0.66/DockerfileRuntime))_ |
-| [hugo](https://www.hugo.org/) | ![hugo](https://img.shields.io/badge/hugo-0.67.1-green.svg) | ![Docker Version)](https://img.shields.io/docker/v/gearboxworks/hugo/0.67.1) | ![Docker Size](https://img.shields.io/docker/image-size/gearboxworks/hugo/0.67.1) | _([`0.67.1`, `0.67`, `latest`](https://github.com/gearboxworks/docker-hugo/blob/master/0.67/DockerfileRuntime))_ |
+| [hugo](https://gohugo.io/) | ![hugo](https://img.shields.io/badge/hugo-0.60.1-green.svg) | ![Docker Version)](https://img.shields.io/docker/v/gearboxworks/hugo/0.60.1) | ![Docker Size](https://img.shields.io/docker/image-size/gearboxworks/hugo/0.60.1) | _([`0.60.1`, `0.60`](https://github.com/gearboxworks/docker-hugo/blob/master/0.60/DockerfileRuntime))_ |
+| [hugo](https://gohugo.io/) | ![hugo](https://img.shields.io/badge/hugo-0.62.2-green.svg) | ![Docker Version)](https://img.shields.io/docker/v/gearboxworks/hugo/0.62.2) | ![Docker Size](https://img.shields.io/docker/image-size/gearboxworks/hugo/0.62.2) | _([`0.62.2`, `0.62`](https://github.com/gearboxworks/docker-hugo/blob/master/0.62/DockerfileRuntime))_ |
+| [hugo](https://gohugo.io/) | ![hugo](https://img.shields.io/badge/hugo-0.63.2-green.svg) | ![Docker Version)](https://img.shields.io/docker/v/gearboxworks/hugo/0.63.2) | ![Docker Size](https://img.shields.io/docker/image-size/gearboxworks/hugo/0.63.2) | _([`0.63.2`, `0.63`](https://github.com/gearboxworks/docker-hugo/blob/master/0.63/DockerfileRuntime))_ |
+| [hugo](https://gohugo.io/) | ![hugo](https://img.shields.io/badge/hugo-0.64.1-green.svg) | ![Docker Version)](https://img.shields.io/docker/v/gearboxworks/hugo/0.64.1) | ![Docker Size](https://img.shields.io/docker/image-size/gearboxworks/hugo/0.64.1) | _([`0.64.1`, `0.64`](https://github.com/gearboxworks/docker-hugo/blob/master/0.64/DockerfileRuntime))_ |
+| [hugo](https://gohugo.io/) | ![hugo](https://img.shields.io/badge/hugo-0.65.3-green.svg) | ![Docker Version)](https://img.shields.io/docker/v/gearboxworks/hugo/0.65.3) | ![Docker Size](https://img.shields.io/docker/image-size/gearboxworks/hugo/0.65.3) | _([`0.65.3`, `0.65`](https://github.com/gearboxworks/docker-hugo/blob/master/0.65/DockerfileRuntime))_ |
+| [hugo](https://gohugo.io/) | ![hugo](https://img.shields.io/badge/hugo-0.66.0-green.svg) | ![Docker Version)](https://img.shields.io/docker/v/gearboxworks/hugo/0.66.0) | ![Docker Size](https://img.shields.io/docker/image-size/gearboxworks/hugo/0.66.0) | _([`0.66.0`, `0.66`](https://github.com/gearboxworks/docker-hugo/blob/master/0.66/DockerfileRuntime))_ |
+| [hugo](https://gohugo.io/) | ![hugo](https://img.shields.io/badge/hugo-0.67.1-green.svg) | ![Docker Version)](https://img.shields.io/docker/v/gearboxworks/hugo/0.67.1) | ![Docker Size](https://img.shields.io/docker/image-size/gearboxworks/hugo/0.67.1) | _([`0.67.1`, `0.67`, `latest`](https://github.com/gearboxworks/docker-hugo/blob/master/0.67/DockerfileRuntime))_ |
 
 
 ## Using this container.
@@ -47,7 +47,7 @@ Simply clone this repository to your local machine
 `make push` - Push already built Docker images to Docker Hub, (only for Gearbox admins). Push all versions from the base directory or specific versions from each directory.
 
 ### Runtime from GitHub repo
-When you `cd` into a version directory you can also perform a few more actions.
+You can either build your container as above, or use it from DockerHub with these commands:
 
 `make start` - Spin up a Docker container with the correct runtime configs.
 

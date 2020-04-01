@@ -9,9 +9,9 @@ c_ok "Installing packages."
 APKBIN="$(which apk)"
 if [ "${APKBIN}" != "" ]
 then
-	if [ -f /etc/gearbox/build/{{ .Json.name }}.apks ]
+	if [ -f /etc/gearbox/build/{{ .Json.meta.name }}.apks ]
 	then
-		APKS="$(cat /etc/gearbox/build/{{ .Json.name }}.apks)"
+		APKS="$(cat /etc/gearbox/build/{{ .Json.meta.name }}.apks)"
 		${APKBIN} update && ${APKBIN} add --no-cache ${APKS}; checkExit
 	fi
 fi
@@ -19,17 +19,17 @@ fi
 APTBIN="$(which apt-get)"
 if [ "${APTBIN}" != "" ]
 then
-	if [ -f /etc/gearbox/build/{{ .Json.name }}.apt ]
+	if [ -f /etc/gearbox/build/{{ .Json.meta.name }}.apt ]
 	then
-		DEBS="$(cat /etc/gearbox/build/{{ .Json.name }}.apt)"
+		DEBS="$(cat /etc/gearbox/build/{{ .Json.meta.name }}.apt)"
 		${APTBIN} update && ${APTBIN} install ${DEBS}; checkExit
 	fi
 fi
 
 
-if [ -f /etc/gearbox/build/{{ .Json.name }}.env ]
+if [ -f /etc/gearbox/build/{{ .Json.meta.name }}.env ]
 then
-	. /etc/gearbox/build/{{ .Json.name }}.env
+	. /etc/gearbox/build/{{ .Json.meta.name }}.env
 fi
 
 if [ ! -d /usr/local/bin ]

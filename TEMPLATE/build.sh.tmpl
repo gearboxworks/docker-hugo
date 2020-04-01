@@ -1,7 +1,7 @@
 #!/bin/bash
 # {{ .CreationWarning }}
 # {{ .CreationInfo }}
-{{ if not .Json.name }}
+{{ if not .Json.meta.name }}
 # No name
 
 {{ else }}
@@ -26,16 +26,22 @@ else
 fi
 
 ################################################################################
-if [ -f "{{ .JsonFile.Dir }}/{{ .JsonFile.Name }}" ]
-then
-	cp "{{ .JsonFile.Dir }}/{{ .JsonFile.Name }}" "${DIR}/gearbox-{{ .Json.name }}.json"
-fi
+#if [ -f "{{ .JsonFile.Dir }}/{{ .JsonFile.Name }}" ]
+#then
+#	if [ "${GB_REF}" == "base" ]
+#	then
+#		cp "{{ .JsonFile.Dir }}/{{ .JsonFile.Name }}" "${DIR}/{{ .Json.meta.name }}.json"
+#	else
+#		cp "{{ .JsonFile.Dir }}/{{ .JsonFile.Name }}" "${DIR}/gearbox-{{ .Json.meta.name }}.json"
+#	fi
+#	cp "{{ .JsonFile.Dir }}/{{ .JsonFile.Name }}" "${DIR}/gearbox.json"
+#fi
 
 ################################################################################
 TMPLDIRS="$(find ${DIR}/ -name '*JSON_NAME*')"
 for dir in ${TMPLDIRS}
 do
-	NEWDIR="$(echo -n "${dir}" | sed 's/JSON_NAME/{{ .Json.name }}/')"
+	NEWDIR="$(echo -n "${dir}" | sed 's/JSON_NAME/{{ .Json.meta.name }}/')"
 	mv -i "${dir}" "${NEWDIR}"
 done
 
@@ -43,7 +49,7 @@ done
 TMPLFILES="$(find ${DIR}/ -name '*\.tmpl')"
 for file in ${TMPLFILES}
 do
-	OUTFILE="$(echo -n "${file}" | sed 's/JSON_NAME/{{ .Json.name }}/')"
+	OUTFILE="$(echo -n "${file}" | sed 's/JSON_NAME/{{ .Json.meta.name }}/')"
 	if [ "${file}" != "${OUTFILE}" ]
 	then
 		mv -i "${file}" "${OUTFILE}"
