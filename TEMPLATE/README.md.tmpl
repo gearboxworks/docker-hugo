@@ -6,9 +6,9 @@ This is the repository for the [{{ .Json.meta.name }}]({{ .Json.meta.refurl }}) 
 
 
 ## Repository Info
-GitHub commit: ![commit-date](https://img.shields.io/github/last-commit/gearboxworks/docker-{{ .Json.meta.name }}?style=flat-square)
+GitHub commit: ![commit-date](https://img.shields.io/github/last-commit/{{ $.Json.meta.organization }}/docker-{{ .Json.meta.name }}?style=flat-square)
 
-GitHub release(latest): ![last-release-date](https://img.shields.io/github/release-date/gearboxworks/docker-{{ .Json.meta.name }}) ![last-release-date](https://img.shields.io/github/v/tag/gearboxworks/docker-{{ .Json.meta.name }}?sort=semver) [![release-state](https://github.com/gearboxworks/docker-{{ .Json.meta.name }}/workflows/release/badge.svg?event=release)](https://github.com/gearboxworks/docker-{{ .Json.meta.name }}/actions?query=workflow%3Arelease)
+GitHub release(latest): ![last-release-date](https://img.shields.io/github/release-date/{{ $.Json.meta.organization }}/docker-{{ .Json.meta.name }}) ![last-release-date](https://img.shields.io/github/v/tag/{{ $.Json.meta.organization }}/docker-{{ .Json.meta.name }}?sort=semver) [![release-state](https://github.com/{{ $.Json.meta.organization }}/docker-{{ .Json.meta.name }}/workflows/release/badge.svg?event=release)](https://github.com/{{ $.Json.meta.organization }}/docker-{{ .Json.meta.name }}/actions?query=workflow%3Arelease)
 
 
 ## Supported versions and respective Dockerfiles
@@ -17,7 +17,7 @@ GitHub release(latest): ![last-release-date](https://img.shields.io/github/relea
 | ------- | -------------- | -------------- | ----------- | ----------- |
 {{- range $key, $value := .Json.versions }}
 {{- if ne $key "" }}
-| {{ if $.Json.meta.refurl }}[{{ $.Json.meta.name }}]({{ $.Json.meta.refurl }}){{ else }}{{ $.Json.meta.name }}{{ end }} | ![{{ $.Json.meta.name }}](https://img.shields.io/badge/{{ $key }}-green.svg) | ![Docker Version)](https://img.shields.io/docker/v/gearboxworks/{{ $.Json.meta.name }}/{{ $key }}) | ![Docker Size](https://img.shields.io/docker/image-size/gearboxworks/{{ $.Json.meta.name }}/{{ $key }}) | _([`{{ $key }}`{{ with $value.majorversion }}, `{{ . }}`{{ end }}{{ with $value.latest }}, `latest`{{ end }}](https://github.com/gearboxworks/docker-{{ $.Json.meta.name }}/blob/master/{{ $value.majorversion }}/DockerfileRuntime))_ |
+| {{ if $.Json.meta.refurl }}[{{ $.Json.meta.name }}]({{ $.Json.meta.refurl }}){{ else }}{{ $.Json.meta.name }}{{ end }} | ![{{ $.Json.meta.name }}](https://img.shields.io/badge/{{ $key }}-green.svg) | [![Docker Version)](https://img.shields.io/docker/v/{{ $.Json.meta.organization }}/{{ $.Json.meta.name }}/{{ $key }})](https://hub.docker.com/repository/docker/{{ $.Json.meta.organization }}/{{ $.Json.meta.name }}) | [![Docker Size](https://img.shields.io/docker/image-size/{{ $.Json.meta.organization }}/{{ $.Json.meta.name }}/{{ $key }})](https://hub.docker.com/repository/docker/{{ $.Json.meta.organization }}/{{ $.Json.meta.name }}) | _([`{{ $key }}`{{ with $value.majorversion }}, `{{ . }}`{{ end }}{{ with $value.latest }}, `latest`{{ end }}](https://github.com/{{ $.Json.meta.organization }}/docker-{{ $.Json.meta.name }}/blob/master/versions/{{ $key }}/DockerfileRuntime))_ |
 {{- end }}
 {{- end }}
 {{- else }}
@@ -25,25 +25,100 @@ GitHub release(latest): ![last-release-date](https://img.shields.io/github/relea
 | ------- | -------------- | -------------- | ----------- | ----------- |
 {{- range $key, $value := .Json.versions }}
 {{- if ne $key "" }}
-| {{ if $.Json.meta.refurl }}[{{ $.Json.meta.name }}]({{ $.Json.meta.refurl }}){{ else }}{{ $.Json.meta.name }}{{ end }} | ![{{ $.Json.meta.name }}](https://img.shields.io/badge/{{ $.Json.meta.name }}-{{ $key }}-green.svg) | ![Docker Version)](https://img.shields.io/docker/v/gearboxworks/{{ $.Json.meta.name }}/{{ $key }}) | ![Docker Size](https://img.shields.io/docker/image-size/gearboxworks/{{ $.Json.meta.name }}/{{ $key }}) | _([`{{ $key }}`{{ with $value.majorversion }}, `{{ . }}`{{ end }}{{ with $value.latest }}, `latest`{{ end }}](https://github.com/gearboxworks/docker-{{ $.Json.meta.name }}/blob/master/{{ $value.majorversion }}/DockerfileRuntime))_ |
+| {{ if $.Json.meta.refurl }}[{{ $.Json.meta.name }}]({{ $.Json.meta.refurl }}){{ else }}{{ $.Json.meta.name }}{{ end }} | ![{{ $.Json.meta.name }}](https://img.shields.io/badge/{{ $.Json.meta.name }}-{{ $key }}-green.svg) | [![Docker Version)](https://img.shields.io/docker/v/{{ $.Json.meta.organization }}/{{ $.Json.meta.name }}/{{ $key }})](https://hub.docker.com/repository/docker/{{ $.Json.meta.organization }}/{{ $.Json.meta.name }}) | [![Docker Size](https://img.shields.io/docker/image-size/{{ $.Json.meta.organization }}/{{ $.Json.meta.name }}/{{ $key }})](https://hub.docker.com/repository/docker/{{ $.Json.meta.organization }}/{{ $.Json.meta.name }}) | _([`{{ $key }}`{{ with $value.majorversion }}, `{{ . }}`{{ end }}{{ with $value.latest }}, `latest`{{ end }}](https://github.com/{{ $.Json.meta.organization }}/docker-{{ $.Json.meta.name }}/blob/master/versions/{{ $key }}/DockerfileRuntime))_ |
 {{- end }}
 {{- end }}
 {{- end }}
+
+
+## About this container.
+A driving force behind [Gearbox](https://github.com/gearboxworks/) is to improve the user experience using software, and especially for software developers.
+
+Our vision is to empower developers and other software users to quickly and easily use almost any version of a software service, command line tool or API without without first getting bogged down with installation and configuration.
+
+In other words, our vision for [Gearbox](https://github.com/gearboxworks/) users is that software "**just works**".
 
 
 ## Using this container.
-This container has been designed to work within the [Gearbox](https://github.com/gearboxworks/)
-framework.
+This container has been designed to work within the [Gearbox](https://github.com/gearboxworks/) framework.
 However, due to the flexability of Gearbox, it can be used outside of this framework.
-You can either use it directly from DockerHub or GitHub.
+
+There are three methods:
+
+## Method 1: Using gb-launch
+`gb-launch` is a tool specifically designed to interact with a Gearbox Docker container.
+
+It provides three important functional areas, without any Docker container learning curve:
+- Allows control over Gearbox Docker containers: stop, start, create, remove.
+- Build, update, modify and release Docker images.
+- Acts as a proxy for interactive commands within a Gearbox Docker container.
+
+It also provides a functional SSH daemon for connecting remotely as well as a standard set of common tools and utilities.
 
 
-## Method 1: GitHub repo
+### Setup from GitHub repo
+`gb-launch` is currently in beta testing and is included along with all Gearbox Docker repos.
+Once out of beta, it will be included within the Gearbox installation package.
+
+For now, simply clone this repository to your local machine.
+
+`git clone https://github.com/{{ $.Json.meta.organization }}/docker-{{ .Json.meta.name }}.git`
+
+### Running gb-launch
+There are many ways to call gb-launch, either directly or indirectly.
+Additionally, all host environment variables will be imported into the container seamlessly.
+This allows a devloper to try multiple versions of software as though they were installed locally.
+
+If a container is missing, it will be downloaded and created. Multiple versions can co-exist.
+
+Create, and start the {{ .Json.meta.name }} Gearbox container.
+
+`./bin/gb-launch -gb-name {{ .Json.meta.name }}`
+
+Create, and start the {{ .Json.meta.name }} Gearbox container. Run a shell.
+
+`./bin/gb-launch -gb-name {{ .Json.meta.name }} -gb-shell`
+
+{{- $vk := keys .Json.versions }}{{- $pv := index $vk 0 }}
+
+Create, and start the {{ .Json.meta.name }} Gearbox container with version {{ $pv }} and run a shell.
+
+`./bin/gb-launch -gb-name {{ .Json.meta.name }} -gb-version {{ $pv }} -gb-shell`
+
+If {{ .Json.meta.name }} is symlinked to `gb-launch`, then you can drop the `-gb-name` flag.
+
+`./bin/{{ .Json.meta.name }}`
+
+Running {{ .Json.meta.name }} Gearbox container default command. If a container has a default interactive command, arguments can be supplied without specifying that command.
+
+`./bin/{{ .Json.meta.name }} -flag1 -flag2 variable`
+
+`./bin/gb-launch -gb-name {{ .Json.meta.name }} -gb-version {{ $pv }} -flag1 -flag2 variable`
+
+
+Running alternate commands within the {{ .Json.meta.name }} Gearbox container.
+
+`./bin/{{ .Json.meta.name }} -gb-shell -- ls -l`
+
+`./bin/gb-launch -gb-name {{ .Json.meta.name }} -gb-version {{ $pv }} -gb-shell -- ls -l`
+
+`./bin/{{ .Json.meta.name }} -gb-shell -- ps -eaf`
+
+`./bin/gb-launch -gb-name {{ .Json.meta.name }} -gb-version {{ $pv }} -gb-shell -- ps -eaf`
+
+
+ssh - All [Gearbox](https://github.com/gearboxworks/) containers have a running SSH daemon. So you can connect remotely.
+To show what ports are exported to the host.
+
+`./bin/gb-launch -gb-name {{ .Json.meta.name }} -gb-list`
+
+
+## Method 2: GitHub repo
 
 ### Setup from GitHub repo
 Simply clone this repository to your local machine
 
-`git clone https://github.com/gearboxworks/{{ .Json.meta.name }}-docker.git`
+`git clone https://github.com/{{ $.Json.meta.organization }}/docker-{{ .Json.meta.name }}.git`
 
 ### Building from GitHub repo
 `make build` - Build Docker images. Build all versions from the base directory or specific versions from each directory.
@@ -70,7 +145,7 @@ You can either build your container as above, or use it from DockerHub with thes
 `make test` - Will issue a `stop`, `rm`, `clean`, `build`, `create` and `start` on a Docker container.
 
 
-## Method 2: Docker Hub
+## Method 3: Docker Hub
 
 ### Setup from Docker Hub
 A simple `docker pull gearbox/{{ .Json.meta.name }}` will pull down the latest version.
@@ -102,6 +177,9 @@ shell - Run a shell, (/bin/bash), within a Docker container.
 
 ### SSH
 ssh - All [Gearbox](https://github.com/gearboxworks/) containers have a running SSH daemon. So you can connect remotely.
+
+Either use `gb-launch` above or discover the port and SSH directly.
+
 
 ```
 SSH_PORT="$(docker port {{ .Json.meta.name }}-latest 22/tcp | sed 's/0.0.0.0://')"

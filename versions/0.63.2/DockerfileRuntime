@@ -1,7 +1,7 @@
 
 ################################################################################
 # WARNING: This file has been auto-generated. DO NOT EDIT: WARNING
-# Created on 2020-04-01T11:31:50+1100, using template:DockerfileRuntime.tmpl and json:gearbox.json
+# Created on 2020-04-03T14:07:01+1100, using template:DockerfileRuntime.tmpl and json:gearbox.json
 # Plain Docker container for docker-hugo based off gearboxworks/gearbox-base:alpine-3.10
 
 ARG VERSION=0.63.2

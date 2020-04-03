@@ -2,12 +2,15 @@ name: release
 
 on:
   release:
-    types: [published]
+    types: [published, edited]
 
 jobs:
   build_docker_images:
-    runs-on: ubuntu-latest
     name: Building Images for ${{ github.ref }}
+    strategy:
+      matrix:
+        versions: [all]
+    runs-on: ubuntu-latest
     env:
       SSH_KEY: ${{ secrets.SSH_KEY }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -21,16 +24,11 @@ jobs:
       with:
         ref: ${{ github.ref }}
     - name: 02-list
-      run: ls -l
+      run: ls -l versions
     - name: 03-build
-      # run: make ${{steps.pull.args }}
-      run: make build-all
-    - name: 04-test
+      # run: make ${{ steps.pull.args }}
       run: |
         eval "$(ssh-agent -s)"
         ssh-add - <<< "${SSH_KEY}"
-        make test-all
-    - name: 05-push
-      run: |
         docker login --username gearboxbuild --password "${DOCKERHUB_TOKEN}"
-        make dockerhub-all
+        make release-${{ matrix.versions }}

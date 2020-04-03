@@ -342,6 +342,10 @@ gb_build() {
 
 		# LOGFILE="${GB_VERDIR}/logs/$(date +'%Y%m%d-%H%M%S').log"
 		LOGFILE="${GB_VERDIR}/logs/build.log"
+		if [ ! -d "${GB_VERDIR}/logs/" ]
+		then
+			mkdir -p "${GB_VERDIR}/logs"
+		fi
 
 		if [ "${GB_REF}" == "base" ]
 		then
@@ -626,7 +630,8 @@ gb_release() {
 	do
 		gb_clean ${GB_VERSION} && \
 		gb_build ${GB_VERSION} && \
-		gb_test ${GB_VERSION}
+		gb_test ${GB_VERSION} && \
+		gb_dockerhub ${GB_VERSION}
 	done
 
 	return 0
@@ -862,6 +867,10 @@ gb_test() {
 
 					# LOGFILE="${GB_VERDIR}/logs/$(date +'%Y%m%d-%H%M%S').log"
 					LOGFILE="${GB_VERDIR}/logs/test.log"
+					if [ ! -d "${GB_VERDIR}/logs/" ]
+					then
+						mkdir -p "${GB_VERDIR}/logs"
+					fi
 
 					#if [ "${GITHUB_ACTIONS}" == "" ]
 					#then
