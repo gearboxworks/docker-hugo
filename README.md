@@ -71,9 +71,9 @@ Create, and start the hugo Gearbox container. Run a shell.
 
 `./bin/gb-launch -gb-name hugo -gb-shell`
 
-Create, and start the hugo Gearbox container with version 0.66.0 and run a shell.
+Create, and start the hugo Gearbox container with version  and run a shell.
 
-`./bin/gb-launch -gb-name hugo -gb-version 0.66.0 -gb-shell`
+`./bin/gb-launch -gb-name hugo -gb-version  -gb-shell`
 
 If hugo is symlinked to `gb-launch`, then you can drop the `-gb-name` flag.
 
@@ -83,18 +83,18 @@ Running hugo Gearbox container default command. If a container has a default int
 
 `./bin/hugo -flag1 -flag2 variable`
 
-`./bin/gb-launch -gb-name hugo -gb-version 0.66.0 -flag1 -flag2 variable`
+`./bin/gb-launch -gb-name hugo -gb-version  -flag1 -flag2 variable`
 
 
 Running alternate commands within the hugo Gearbox container.
 
 `./bin/hugo -gb-shell -- ls -l`
 
-`./bin/gb-launch -gb-name hugo -gb-version 0.66.0 -gb-shell -- ls -l`
+`./bin/gb-launch -gb-name hugo -gb-version  -gb-shell -- ls -l`
 
 `./bin/hugo -gb-shell -- ps -eaf`
 
-`./bin/gb-launch -gb-name hugo -gb-version 0.66.0 -gb-shell -- ps -eaf`
+`./bin/gb-launch -gb-name hugo -gb-version  -gb-shell -- ps -eaf`
 
 
 ssh - All [Gearbox](https://github.com/gearboxworks/) containers have a running SSH daemon. So you can connect remotely.
