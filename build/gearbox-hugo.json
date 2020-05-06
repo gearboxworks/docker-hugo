@@ -29,7 +29,10 @@
 	},
 	"run": {
 		"commands": {
-			"default": "/usr/local/apache2/bin/apachectl"
+			"default": "/usr/local/bin/hugo",
+			"/usr/local/bin/hugo": "/usr/local/bin/hugo",
+			"/usr/local/bin/hugo-extended": "/usr/local/bin/hugo-extended",
+			"/usr/local/bin/minify": "/usr/local/bin/minify"
 		}
 	},
 	"project": {

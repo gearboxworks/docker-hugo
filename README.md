@@ -76,13 +76,13 @@ Create, and start the hugo Gearbox container. Run a shell.
 
 `./launch shell hugo`
 
-Create, and start the hugo Gearbox container with version 0.65.3 and run a shell.
+Create, and start the hugo Gearbox container with version 0.66.0 and run a shell.
 
-`./launch shell hugo:0.65.3`
+`./launch shell hugo:0.66.0`
 
-`./launch shell hugo:0.65.3 ls -l`
+`./launch shell hugo:0.66.0 ls -l`
 
-`./launch shell hugo:0.65.3 ps -eaf`
+`./launch shell hugo:0.66.0 ps -eaf`
 
 
 ### Available commands
@@ -95,10 +95,13 @@ Running hugo Gearbox container default command. If a container has a default int
 
 `./hugo -flag1 -flag2 variable`
 
-`./launch hugo:0.65.3 -flag1 -flag2 variable`
+`./launch hugo:0.66.0 -flag1 -flag2 variable`
 
 Gearbox containers may have multiple executables that can be run. The hugo Gearbox container has the following available commands:
-- The default command will execute `/usr/local/apache2/bin/apachectl` within the container.
+- `/usr/local/bin/hugo` - will execute `/usr/local/bin/hugo` within the container.
+- `/usr/local/bin/hugo-extended` - will execute `/usr/local/bin/hugo-extended` within the container.
+- `/usr/local/bin/minify` - will execute `/usr/local/bin/minify` within the container.
+- The default command will execute `/usr/local/bin/hugo` within the container.
 
 
 ### Remote connection
