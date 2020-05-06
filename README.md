@@ -21,6 +21,8 @@ GitHub release(latest): ![last-release-date](https://img.shields.io/github/relea
 | [hugo](https://gohugo.io/) | ![hugo](https://img.shields.io/badge/hugo-0.65.3-green.svg) | [![Docker Version)](https://img.shields.io/docker/v/gearboxworks/hugo/0.65.3)](https://hub.docker.com/repository/docker/gearboxworks/hugo) | [![Docker Size](https://img.shields.io/docker/image-size/gearboxworks/hugo/0.65.3)](https://hub.docker.com/repository/docker/gearboxworks/hugo) | _([`0.65.3`, `0.65`](https://github.com/gearboxworks/docker-hugo/blob/master/versions/0.65.3/DockerfileRuntime))_ |
 | [hugo](https://gohugo.io/) | ![hugo](https://img.shields.io/badge/hugo-0.66.0-green.svg) | [![Docker Version)](https://img.shields.io/docker/v/gearboxworks/hugo/0.66.0)](https://hub.docker.com/repository/docker/gearboxworks/hugo) | [![Docker Size](https://img.shields.io/docker/image-size/gearboxworks/hugo/0.66.0)](https://hub.docker.com/repository/docker/gearboxworks/hugo) | _([`0.66.0`, `0.66`](https://github.com/gearboxworks/docker-hugo/blob/master/versions/0.66.0/DockerfileRuntime))_ |
 | [hugo](https://gohugo.io/) | ![hugo](https://img.shields.io/badge/hugo-0.67.1-green.svg) | [![Docker Version)](https://img.shields.io/docker/v/gearboxworks/hugo/0.67.1)](https://hub.docker.com/repository/docker/gearboxworks/hugo) | [![Docker Size](https://img.shields.io/docker/image-size/gearboxworks/hugo/0.67.1)](https://hub.docker.com/repository/docker/gearboxworks/hugo) | _([`0.67.1`, `0.67`, `latest`](https://github.com/gearboxworks/docker-hugo/blob/master/versions/0.67.1/DockerfileRuntime))_ |
+| [hugo](https://gohugo.io/) | ![hugo](https://img.shields.io/badge/hugo-0.68.3-green.svg) | [![Docker Version)](https://img.shields.io/docker/v/gearboxworks/hugo/0.68.3)](https://hub.docker.com/repository/docker/gearboxworks/hugo) | [![Docker Size](https://img.shields.io/docker/image-size/gearboxworks/hugo/0.68.3)](https://hub.docker.com/repository/docker/gearboxworks/hugo) | _([`0.68.3`, `0.68`, `latest`](https://github.com/gearboxworks/docker-hugo/blob/master/versions/0.68.3/DockerfileRuntime))_ |
+| [hugo](https://gohugo.io/) | ![hugo](https://img.shields.io/badge/hugo-0.69.2-green.svg) | [![Docker Version)](https://img.shields.io/docker/v/gearboxworks/hugo/0.69.2)](https://hub.docker.com/repository/docker/gearboxworks/hugo) | [![Docker Size](https://img.shields.io/docker/image-size/gearboxworks/hugo/0.69.2)](https://hub.docker.com/repository/docker/gearboxworks/hugo) | _([`0.69.2`, `0.69`, `latest`](https://github.com/gearboxworks/docker-hugo/blob/master/versions/0.69.2/DockerfileRuntime))_ |
 
 
 ## About this container.
@@ -37,8 +39,8 @@ However, due to the flexability of Gearbox, it can be used outside of this frame
 
 There are three methods:
 
-## Method 1: Using gb-launch
-`gb-launch` is a tool specifically designed to interact with a Gearbox Docker container.
+## Method 1: Using launch
+`launch` is a tool specifically designed to interact with a Gearbox Docker container.
 
 It provides three important functional areas, without any Docker container learning curve:
 - Allows control over Gearbox Docker containers: stop, start, create, remove.
@@ -47,60 +49,63 @@ It provides three important functional areas, without any Docker container learn
 
 It also provides a functional SSH daemon for connecting remotely as well as a standard set of common tools and utilities.
 
+Further `launch` documentation can be [found here](https://github.com/gearboxworks/docker-template/blob/master/LAUNCH.md).
 
-### Setup from GitHub repo
-`gb-launch` is currently in beta testing and is included along with all Gearbox Docker repos.
+### Download launch
+`launch` is currently in beta testing and is included along with all Gearbox Docker repos.
 Once out of beta, it will be included within the Gearbox installation package.
 
-For now, simply clone this repository to your local machine.
+For now, simply download the standalone `launch` binary for your O/S.
+- [Mac OSX 64bit](https://github.com/gearboxworks/docker-template/raw/master/bin/Darwin/launch)
+- [Linux 64bit](https://github.com/gearboxworks/docker-template/raw/master/bin/Linux/launch)
+- [Windows 64bit](https://github.com/gearboxworks/docker-template/raw/master/bin/Windows/launch)
 
-`git clone https://github.com/gearboxworks/docker-hugo.git`
 
-### Running gb-launch
-There are many ways to call gb-launch, either directly or indirectly.
+### Running launch
+There are many ways to call launch, either directly or indirectly.
 Additionally, all host environment variables will be imported into the container seamlessly.
 This allows a devloper to try multiple versions of software as though they were installed locally.
 
 If a container is missing, it will be downloaded and created. Multiple versions can co-exist.
 
-Create, and start the hugo Gearbox container.
+Install, create, and start the hugo Gearbox container.
 
-`./bin/gb-launch -gb-name hugo`
+`./launch install hugo`
 
 Create, and start the hugo Gearbox container. Run a shell.
 
-`./bin/gb-launch -gb-name hugo -gb-shell`
+`./launch shell hugo`
 
-Create, and start the hugo Gearbox container with version  and run a shell.
+Create, and start the hugo Gearbox container with version 0.65.3 and run a shell.
 
-`./bin/gb-launch -gb-name hugo -gb-version  -gb-shell`
+`./launch shell hugo:0.65.3`
 
-If hugo is symlinked to `gb-launch`, then you can drop the `-gb-name` flag.
+`./launch shell hugo:0.65.3 ls -l`
 
-`./bin/hugo`
+`./launch shell hugo:0.65.3 ps -eaf`
+
+
+### Available commands
+If hugo is symlinked to `launch`, then the Gearbox container will be determined automatically and the default command will be run.
+All available commands for a Gearbox container will be automatically symlinked upon installation.
+
+`./hugo`
 
 Running hugo Gearbox container default command. If a container has a default interactive command, arguments can be supplied without specifying that command.
 
-`./bin/hugo -flag1 -flag2 variable`
+`./hugo -flag1 -flag2 variable`
 
-`./bin/gb-launch -gb-name hugo -gb-version  -flag1 -flag2 variable`
+`./launch hugo:0.65.3 -flag1 -flag2 variable`
 
-
-Running alternate commands within the hugo Gearbox container.
-
-`./bin/hugo -gb-shell -- ls -l`
-
-`./bin/gb-launch -gb-name hugo -gb-version  -gb-shell -- ls -l`
-
-`./bin/hugo -gb-shell -- ps -eaf`
-
-`./bin/gb-launch -gb-name hugo -gb-version  -gb-shell -- ps -eaf`
+Gearbox containers may have multiple executables that can be run. The hugo Gearbox container has the following available commands:
+- The default command will execute `/usr/local/apache2/bin/apachectl` within the container.
 
 
+### Remote connection
 ssh - All [Gearbox](https://github.com/gearboxworks/) containers have a running SSH daemon. So you can connect remotely.
-To show what ports are exported to the host.
+To show what ports are exported to the host, use the following command.
 
-`./bin/gb-launch -gb-name hugo -gb-list`
+`./launch list hugo`
 
 
 ## Method 2: GitHub repo
@@ -168,7 +173,7 @@ shell - Run a shell, (/bin/bash), within a Docker container.
 ### SSH
 ssh - All [Gearbox](https://github.com/gearboxworks/) containers have a running SSH daemon. So you can connect remotely.
 
-Either use `gb-launch` above or discover the port and SSH directly.
+Either use `launch` above or discover the port and SSH directly.
 
 
 ```

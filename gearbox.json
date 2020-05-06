@@ -28,6 +28,9 @@
 		"restart": "--restart no"
 	},
 	"run": {
+		"commands": {
+			"default": "/usr/local/apache2/bin/apachectl"
+		}
 	},
 	"project": {
 	},
@@ -76,6 +79,17 @@
 			"ref": "",
 			"base": "gearboxworks/gearbox-base:alpine-3.10"
 		},
-		"": {}
+		"0.68.3": {
+			"majorversion": "0.68",
+			"latest": true,
+			"ref": "",
+			"base": "gearboxworks/gearbox-base:alpine-3.10"
+		},
+		"0.69.2": {
+			"majorversion": "0.69",
+			"latest": true,
+			"ref": "",
+			"base": "gearboxworks/gearbox-base:alpine-3.10"
+		}
 	}
 }

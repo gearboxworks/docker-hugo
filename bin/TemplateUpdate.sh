@@ -69,3 +69,4 @@ else
 	echo "# Gearbox[docker-template]: Cannot find docker-template repository."
 fi
 
+make init
