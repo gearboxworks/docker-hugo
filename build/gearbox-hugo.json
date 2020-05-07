@@ -30,9 +30,9 @@
 	"run": {
 		"commands": {
 			"default": "/usr/local/bin/hugo",
-			"/usr/local/bin/hugo": "/usr/local/bin/hugo",
-			"/usr/local/bin/hugo-extended": "/usr/local/bin/hugo-extended",
-			"/usr/local/bin/minify": "/usr/local/bin/minify"
+			"hugo": "/usr/local/bin/hugo",
+			"hugo-extended": "/usr/local/bin/hugo-extended",
+			"minify": "/usr/local/bin/minify"
 		}
 	},
 	"project": {
